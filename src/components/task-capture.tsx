@@ -70,19 +70,24 @@ export function TaskCapture() {
     setDraft((d) => (d ? { ...d, [k]: v } : d));
 
   return (
-    <div className="rounded-xl border bg-card p-5 shadow-soft">
-      <Label htmlFor="capture" className="flex items-center gap-2 text-base font-semibold">
-        <Sparkles className="size-4 text-accent" /> Capture a task
+    <div className="glass relative overflow-hidden rounded-2xl p-5 shadow-glow md:p-6">
+      <div className="pointer-events-none absolute -right-20 -top-20 size-56 rounded-full bg-primary/20 blur-3xl" />
+      <Label htmlFor="capture" className="relative flex items-center gap-2 font-display text-2xl font-semibold">
+        <Sparkles className="size-5 text-accent" /> What's on your mind?
       </Label>
+      <p className="relative mt-1 text-sm text-muted-foreground">Capture a task, idea, or commitment. AetherMind will help organize it.</p>
       <Textarea
         id="capture"
-        className="mt-3 min-h-20"
-        placeholder='e.g. "Complete my Generative AI assignment by Friday. High priority. About three hours."'
+        className="relative mt-4 min-h-24 bg-background/60"
+        placeholder='e.g. "Finish my machine learning assignment by Friday, high priority, about two hours."'
         value={text}
         onChange={(e) => setText(e.target.value)}
       />
-      <div className="mt-3 flex justify-end">
-        <Button onClick={analyse} disabled={busy || text.trim().length < 3}>
+      <div className="relative mt-3 flex justify-end gap-2">
+        {(text || draft) && (
+          <Button variant="ghost" onClick={() => { setText(""); setDraft(null); }} disabled={busy}>Clear</Button>
+        )}
+        <Button onClick={analyse} disabled={busy || text.trim().length < 3} className="bg-gradient-brand shadow-glow">
           {busy && !draft ? "Reading…" : "Read with AI"}
         </Button>
       </div>
