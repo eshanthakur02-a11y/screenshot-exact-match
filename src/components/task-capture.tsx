@@ -58,8 +58,7 @@ export function TaskCapture() {
       toast.success(`Saved "${saved.title}"`);
       setDraft(null);
       setText("");
-      qc.invalidateQueries({ queryKey: ["tasks"] });
-      qc.invalidateQueries({ queryKey: ["dashboard"] });
+      qc.invalidateQueries();
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "The task could not be saved.");
     } finally {
