@@ -8,9 +8,9 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/auth")({
   head: () => ({
     meta: [
-      { title: "Aurora Sign Up — AetherMind" },
+      { title: "Sign up — AetherMind" },
       { name: "description", content: "Create your AetherMind account in three quick steps." },
-      { property: "og:title", content: "Aurora Sign Up — AetherMind" },
+      { property: "og:title", content: "Sign up — AetherMind" },
       { property: "og:description", content: "Create your AetherMind account in three quick steps." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -101,7 +101,7 @@ function AuthPage() {
         >
           <div className="flex items-center gap-2">
             <Circle size={20} className="fill-white text-white" />
-            <span className="text-xl font-semibold tracking-tight">Aurora</span>
+            <span className="text-xl font-semibold tracking-tight">Aether<span className="text-accent">Mind</span></span>
           </div>
           <div className="space-y-2">
             <h1 className="text-3xl font-medium tracking-tight">Check your email</h1>
@@ -123,7 +123,7 @@ function AuthPage() {
   }
 
   return (
-    <main className="flex min-h-screen w-full bg-black p-2 font-aurora text-white selection:bg-white/30 transition-all duration-500 lg:h-screen lg:overflow-hidden lg:p-4">
+    <main className="flex min-h-screen w-full bg-background p-2 font-aurora text-white selection:bg-white/30 transition-all duration-500 lg:h-screen lg:overflow-hidden lg:p-4">
       {/* Left column — hero with background video */}
       <div className="relative hidden h-full w-[52%] flex-col items-center justify-end overflow-hidden rounded-3xl px-12 pb-32 shadow-2xl lg:flex">
         <video
@@ -146,17 +146,17 @@ function AuthPage() {
         >
           <motion.div variants={stepVariants} className="flex items-center gap-2">
             <Circle size={20} className="fill-white text-white" />
-            <span className="text-xl font-semibold tracking-tight">Aurora</span>
+            <span className="text-xl font-semibold tracking-tight">Aether<span className="text-accent">Mind</span></span>
           </motion.div>
           <motion.div variants={stepVariants} className="space-y-3">
-            <h1 className="whitespace-nowrap text-4xl font-medium tracking-tight">Join Aurora</h1>
+            <h1 className="whitespace-nowrap text-4xl font-medium tracking-tight">Join AetherMind</h1>
             <p className="px-4 text-sm leading-relaxed text-white/60">
               Follow these 3 quick phases to activate your space.
             </p>
           </motion.div>
           <motion.div variants={stepVariants} className="space-y-3">
             <StepItem number="1" text="Register your identity" active />
-            <StepItem number="2" text="Configure your studio" />
+            <StepItem number="2" text="Configure your workspace" />
             <StepItem number="3" text="Finalize your profile" />
           </motion.div>
         </motion.div>
@@ -172,7 +172,7 @@ function AuthPage() {
         >
           <div className="space-y-2">
             <h2 className="text-3xl font-medium tracking-tight">
-              {mode === "signup" ? "Create New Profile" : "Welcome Back"}
+              {mode === "signup" ? "Create your AetherMind account" : "Welcome Back"}
             </h2>
             <p className="text-sm text-white/40">
               {mode === "signup"
@@ -243,7 +243,7 @@ function AuthPage() {
             <button
               type="submit"
               disabled={busy}
-              className="mt-4 h-14 w-full rounded-xl bg-white font-semibold text-black transition-all hover:bg-white/90 active:scale-[0.98] disabled:opacity-60"
+              className="mt-4 h-14 w-full rounded-xl bg-gradient-brand font-semibold text-primary-foreground shadow-glow transition-all hover:brightness-110 active:scale-[0.98] disabled:opacity-60"
             >
               {busy ? "Please wait…" : mode === "signup" ? "Create Account" : "Log In"}
             </button>
@@ -259,7 +259,7 @@ function AuthPage() {
               </>
             ) : (
               <>
-                New to Aurora?{" "}
+                New to AetherMind?{" "}
                 <button type="button" onClick={() => setMode("signup")} className="text-white underline-offset-4 hover:underline">
                   Create an account
                 </button>
