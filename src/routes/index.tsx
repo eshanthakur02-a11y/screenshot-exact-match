@@ -129,8 +129,8 @@ function Landing() {
 
           <motion.div {...fade(0.25)} className="relative">
             <Laptop />
-            <div className="absolute -right-2 bottom-6 hidden w-[30%] sm:block lg:-right-6"><Phone /></div>
-            <Link to="/auth" className="glass group absolute -bottom-10 right-4 hidden max-w-sm items-center gap-4 rounded-2xl p-4 shadow-glow transition hover:-translate-y-1 md:flex">
+            <div className="absolute -right-2 -bottom-4 hidden w-[24%] sm:block lg:-right-4"><Phone /></div>
+            <Link to="/auth" className="glass group absolute -bottom-16 right-[22%] hidden max-w-sm items-center gap-4 rounded-2xl p-4 shadow-glow transition hover:-translate-y-1 md:flex">
               <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-brand"><Sparkles className="h-6 w-6 text-accent" /></span>
               <span>
                 <span className="block font-semibold">AI Task Capture</span>
@@ -267,7 +267,7 @@ function Laptop() {
               <div className="rounded-md border border-border bg-card p-2">
                 <p className="mb-1.5 font-semibold">Weekly progress</p>
                 <div className="flex h-14 items-end gap-1">
-                  {[30, 45, 40, 60, 75, 50, 35].map((h, i) => <span key={i} className="flex-1 rounded-sm bg-gradient-brand" style={{ height: `${h}%`, opacity: i > 4 ? 0.4 : 1 }} />)}
+                  {[22, 32, 28, 42, 52, 36, 24].map((h, i) => <div key={i} className="w-full rounded-sm bg-gradient-brand" style={{ height: h, opacity: i > 4 ? 0.4 : 1 }} />)}
                 </div>
               </div>
               <div className="col-span-2 rounded-md border border-border bg-card p-2">
