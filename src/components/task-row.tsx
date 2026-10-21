@@ -21,8 +21,7 @@ export function TaskRow({ task, onEdit }: { task: Tables<"tasks">; onEdit?: () =
   const remove = useServerFn(deleteTask);
   const done = task.status === "done";
   const refresh = () => {
-    qc.invalidateQueries({ queryKey: ["tasks"] });
-    qc.invalidateQueries({ queryKey: ["dashboard"] });
+    qc.invalidateQueries();
   };
 
   async function toggle() {

@@ -5,6 +5,8 @@ import { useState, type FormEvent } from "react";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
 import { createTask, listTasks, updateTask } from "@/lib/data/tasks.functions";
+import { listProjects } from "@/lib/data/workspace.functions";
+import { z } from "zod";
 import { PRIORITIES, STATUSES, type Priority, type Status } from "@/lib/task-schema";
 import type { Tables } from "@/integrations/supabase/types";
 import { TaskRow } from "@/components/task-row";
@@ -14,10 +16,17 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 
 const tasksQuery = queryOptions({ queryKey: ["tasks"], queryFn: () => listTasks() });
+export const projectsQuery = queryOptions({ queryKey: ["projects"], queryFn: () => listProjects() });
 
 export const Route = createFileRoute("/_authenticated/tasks")({
   head: () => ({ meta: [{ title: "Tasks — AetherMind" }] }),
-  loader: ({ context }) => context.queryClient.ensureQueryData(tasksQuery),
+  validateSearch: z.object({
+    q: z.string().optional(),
+    new: z.boolean().optional(),
+    filter: z.enum(["open", "all", "todo", "in_progress", "done"]).optional(),
+    project: z.string().optional(),
+  }),
+  loader: ({ context }) => Promise.all([context.queryClient.ensureQueryData(tasksQuery), context.queryClient.ensureQueryData(projectsQuery)]),
   component: TasksPage,
 });
 
@@ -26,20 +35,35 @@ const selectCls = "h-9 rounded-md border border-input bg-background px-3 text-sm
 
 function TasksPage() {
   const { data: tasks } = useSuspenseQuery(tasksQuery);
-  const [filter, setFilter] = useState<Filter>("open");
+  const search = Route.useSearch();
+  const navigate = Route.useNavigate();
+  const { data: projects } = useSuspenseQuery(projectsQuery);
+  const [filter, setFilter] = useState<Filter>(search.filter ?? "open");
   const [priority, setPriority] = useState<Priority | "any">("any");
-  const [editing, setEditing] = useState<Tables<"tasks"> | "new" | null>(null);
+  const [editing, setEditing] = useState<Tables<"tasks"> | "new" | null>(search.new ? "new" : null);
+  const q = (search.q ?? "").toLowerCase();
 
   const shown = tasks.filter(
     (t) =>
       (filter === "all" || (filter === "open" ? t.status !== "done" : t.status === filter)) &&
-      (priority === "any" || t.priority === priority),
+      (priority === "any" || t.priority === priority) &&
+      (!search.project || t.project_id === search.project) &&
+      (!q || t.title.toLowerCase().includes(q) || (t.description ?? "").toLowerCase().includes(q)),
   );
 
   return (
     <div className="space-y-6">
       <div className="flex flex-wrap items-end justify-between gap-3">
-        <h1 className="text-4xl">Tasks</h1>
+        <div>
+          <h1 className="text-4xl">My Tasks</h1>
+          {(search.q || search.project) && (
+            <p className="mt-1 text-sm text-muted-foreground">
+              {search.q && <>Showing matches for “{search.q}”. </>}
+              {search.project && <>Filtered to {projects.find((p) => p.id === search.project)?.name ?? "a project"}. </>}
+              <button className="underline" onClick={() => navigate({ search: {} })}>Clear</button>
+            </p>
+          )}
+        </div>
         <Button onClick={() => setEditing("new")}>
           <Plus /> New task
         </Button>
@@ -73,14 +97,14 @@ function TasksPage() {
           <DialogHeader>
             <DialogTitle>{editing === "new" ? "New task" : "Edit task"}</DialogTitle>
           </DialogHeader>
-          {editing && <TaskForm task={editing === "new" ? null : editing} onDone={() => setEditing(null)} />}
+          {editing && <TaskForm task={editing === "new" ? null : editing} projects={projects} onDone={() => { setEditing(null); if (search.new) navigate({ search: { ...search, new: undefined } }); }} />}
         </DialogContent>
       </Dialog>
     </div>
   );
 }
 
-function TaskForm({ task, onDone }: { task: Tables<"tasks"> | null; onDone: () => void }) {
+function TaskForm({ task, projects, onDone }: { task: Tables<"tasks"> | null; projects: { id: string; name: string }[]; onDone: () => void }) {
   const qc = useQueryClient();
   const create = useServerFn(createTask);
   const update = useServerFn(updateTask);
@@ -92,6 +116,7 @@ function TaskForm({ task, onDone }: { task: Tables<"tasks"> | null; onDone: () =
     status: (task?.status ?? "todo") as Status,
     due_date: task?.due_date ? task.due_date.slice(0, 10) : "",
     estimated_minutes: task?.estimated_minutes?.toString() ?? "",
+    project_id: task?.project_id ?? "",
   });
 
   async function submit(e: FormEvent) {
@@ -104,13 +129,13 @@ function TaskForm({ task, onDone }: { task: Tables<"tasks"> | null; onDone: () =
       status: f.status,
       due_date: f.due_date || null,
       estimated_minutes: f.estimated_minutes ? Number(f.estimated_minutes) : null,
+      project_id: f.project_id || null,
     };
     try {
       if (task) await update({ data: { id: task.id, ...payload } });
       else await create({ data: payload });
       toast.success(task ? "Task updated" : "Task saved");
-      qc.invalidateQueries({ queryKey: ["tasks"] });
-      qc.invalidateQueries({ queryKey: ["dashboard"] });
+      qc.invalidateQueries();
       onDone();
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Could not save");
@@ -148,6 +173,13 @@ function TaskForm({ task, onDone }: { task: Tables<"tasks"> | null; onDone: () =
       <div className="space-y-1.5">
         <Label htmlFor="t-est">Estimated minutes</Label>
         <Input id="t-est" type="number" min={1} value={f.estimated_minutes} onChange={(e) => setF({ ...f, estimated_minutes: e.target.value })} />
+      </div>
+      <div className="space-y-1.5 sm:col-span-2">
+        <Label htmlFor="t-proj">Project</Label>
+        <select id="t-proj" className={`${selectCls} w-full`} value={f.project_id} onChange={(e) => setF({ ...f, project_id: e.target.value })}>
+          <option value="">No project</option>
+          {projects.map((p) => <option key={p.id} value={p.id}>{p.name}</option>)}
+        </select>
       </div>
       <div className="flex justify-end gap-2 sm:col-span-2">
         <Button type="button" variant="ghost" onClick={onDone}>Cancel</Button>
