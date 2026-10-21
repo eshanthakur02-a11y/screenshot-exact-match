@@ -129,6 +129,12 @@
   h1, h2, h3 { font-family: var(--font-display); letter-spacing: -0.01em; }
 }
 
+/* Aurora (/auth) page uses Inter everywhere, including headings */
+.font-aurora :is(h1, h2, h3) {
+  font-family: var(--font-aurora);
+  letter-spacing: -0.01em;
+}
+
 @utility bg-hero {
   background-image: var(--gradient-hero);
 }
