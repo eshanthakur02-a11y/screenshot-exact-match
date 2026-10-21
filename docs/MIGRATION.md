@@ -71,3 +71,9 @@ RLS: every table enabled; select/insert/update/delete only where `auth.uid() = u
 | 4. Task CRUD + filters | Implemented |
 | 5–8. Projects, goals/milestones, weekly reviews, documents | Tables only; UI not built |
 | n8n | Not started (by design) |
+
+## Workspace server functions (src/lib/data/workspace.functions.ts)
+getShell, updateProfile; listProjects/createProject/updateProject/deleteProject (progress = done/total tasks, 0% when empty);
+listGoals/createGoal/updateGoal/deleteGoal, addMilestone/setMilestoneDone/deleteMilestone (progress = done/total milestones, achieved = 100%);
+listNotifications/markNotifications/deleteNotification; getWeeklyReview/saveWeeklyReview (upsert per user+week);
+createBriefing — AI daily briefing via src/lib/ai/briefing.server.ts, not persisted. No schema changes.

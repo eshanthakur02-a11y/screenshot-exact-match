@@ -8,3 +8,11 @@
 - [ ] Stage 7: Weekly AI reviews
 - [ ] Stage 8: Document & meeting intelligence
 - [ ] Later: n8n (last), migration to own Supabase (only on request)
+
+## Dashboard brief (Oct 2026)
+- [x] Shell: grouped sidebar, collapse, mobile drawer, search, quick-create, bell, profile menu
+- [x] Dashboard: metrics (timezone-aware), AI briefing, capture, priorities tabs, deadlines, charts 7/30/90d, projects, goals
+- [x] Projects, Goals + milestones, Calendar (day/week/month/agenda), Weekly Review, Notifications, Settings
+- [ ] Inbox, AI Workspace chat, Documents, Insights, voice capture — not built yet
+- [ ] Working hours / default priority / notification preferences — need new settings fields
+- [ ] Automatic reminders creating notifications — needs a scheduled job
