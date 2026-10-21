@@ -4,6 +4,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { taskInputSchema, taskUpdateSchema } from "@/lib/task-schema";
+import type { TablesUpdate } from "@/integrations/supabase/types";
 
 const toTimestamp = (d: string | null | undefined) =>
   d === undefined ? undefined : d === null ? null : `${d}T12:00:00Z`;
@@ -53,7 +54,7 @@ export const updateTask = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => taskUpdateSchema.parse(input))
   .handler(async ({ data, context }) => {
     const { id, due_date, ...rest } = data;
-    const patch: Record<string, unknown> = { ...rest };
+    const patch: TablesUpdate<"tasks"> = { ...rest };
     if (due_date !== undefined) patch.due_date = toTimestamp(due_date);
     if (rest.status) patch.completed_at = rest.status === "done" ? new Date().toISOString() : null;
     const { data: row, error } = await context.supabase
