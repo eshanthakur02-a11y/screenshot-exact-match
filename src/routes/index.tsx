@@ -230,7 +230,7 @@ function Landing() {
 
 /* ---------- Illustrative device previews (marketing only, not user data) ---------- */
 
-const PRIORITIES = [["Complete AI assignment", "High"], ["Prepare project presentation", "High"], ["Review research paper", "Medium"], ["Plan next week", "Low"]];
+const PRIORITIES: [string, string][] = [["Complete AI assignment", "High"], ["Prepare project presentation", "High"], ["Review research paper", "Medium"], ["Plan next week", "Low"]];
 const tone: Record<string, string> = { High: "bg-priority-high/20 text-priority-high", Medium: "bg-priority-medium/20 text-priority-medium", Low: "bg-priority-low/20 text-priority-low" };
 
 function Laptop() {
