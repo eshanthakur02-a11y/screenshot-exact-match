@@ -93,11 +93,23 @@ function AuthPage() {
   if (sent) {
     return (
       <main className="flex min-h-screen w-full items-center justify-center bg-black p-4 font-aurora text-white">
-        <div className="w-full max-w-sm space-y-3 rounded-2xl bg-brand-gray p-8">
-          <h1 className="text-2xl font-medium tracking-tight">Check your email</h1>
-          <p className="text-sm text-white/50">
-            We sent a confirmation link to {email}. Open it to finish creating your account.
-          </p>
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, ease: "easeOut" }}
+          className="w-full max-w-md space-y-6 rounded-2xl bg-brand-gray p-10"
+        >
+          <div className="flex items-center gap-2">
+            <Circle size={20} className="fill-white text-white" />
+            <span className="text-xl font-semibold tracking-tight">Aurora</span>
+          </div>
+          <div className="space-y-2">
+            <h1 className="text-3xl font-medium tracking-tight">Check your email</h1>
+            <p className="text-sm leading-relaxed text-white/50">
+              We sent a confirmation link to {email}. Open it to finalize your profile.
+            </p>
+          </div>
+          <StepItem number="3" text="Finalize your profile" active />
           <button
             type="button"
             onClick={() => setSent(false)}
@@ -105,7 +117,7 @@ function AuthPage() {
           >
             Back to sign up
           </button>
-        </div>
+        </motion.div>
       </main>
     );
   }
