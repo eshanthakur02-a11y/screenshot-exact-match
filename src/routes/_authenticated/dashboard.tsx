@@ -28,7 +28,7 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
   errorComponent: ({ error, reset }) => (
     <div role="alert" className="glass rounded-2xl p-8 text-center">
       <p className="font-semibold">We couldn't load your dashboard.</p>
-      <p className="mt-1 text-sm text-muted-foreground">{error.message}</p>
+      <p className="mt-1 text-sm text-muted-foreground">{(error as Error).message}</p>
       <Button className="mt-4" onClick={reset}>Try again</Button>
     </div>
   ),
@@ -265,7 +265,7 @@ type Brief = { focus: string; top_task_ids: string[]; plan: string[]; warnings: 
 
 function DailyBriefing({ today, tasks }: { today: string; tasks: { id: string; title: string; priority: string; due_date: string | null }[] }) {
   const run = useServerFn(createBriefing);
-  const [state, setState] = useState<{ brief?: Brief; at?: string; error?: string; busy?: boolean }>({});
+  const [state, setState] = useState<{ brief?: Brief | undefined; at?: string | undefined; error?: string | undefined; busy?: boolean | undefined }>({});
   const [collapsed, setCollapsed] = useState(false);
 
   async function generate() {

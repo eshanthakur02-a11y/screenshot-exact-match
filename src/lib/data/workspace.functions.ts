@@ -6,6 +6,9 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 
 const id = z.string().uuid();
 const dateStr = z.string().regex(/^\d{4}-\d{2}-\d{2}$/);
+// Drops undefined keys (exactOptionalPropertyTypes).
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const clean = (o: Record<string, unknown>): any => Object.fromEntries(Object.entries(o).filter(([, v]) => v !== undefined));
 const fail = (msg: string, e?: unknown) => { if (e) console.error(msg, e); throw new Error(msg); };
 
 /* ---------- Shell (header) ---------- */
@@ -25,7 +28,7 @@ export const updateProfile = createServerFn({ method: "POST" })
   .inputValidator((i: unknown) => z.object({ display_name: z.string().trim().min(1).max(80), timezone: z.string().min(1).max(64) }).parse(i))
   .handler(async ({ data, context }) => {
     try { new Intl.DateTimeFormat("en", { timeZone: data.timezone }); } catch { fail("That timezone isn't recognised."); }
-    const { data: row, error } = await context.supabase.from("profiles").update(data).eq("id", context.userId).select("display_name, timezone").single();
+    const { data: row, error } = await context.supabase.from("profiles").update(clean(data)).eq("id", context.userId).select("display_name, timezone").single();
     if (error || !row) fail("Settings could not be saved.", error);
     return row!;
   });
@@ -58,7 +61,7 @@ export const createProject = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((i: unknown) => projectInput.parse(i))
   .handler(async ({ data, context }) => {
-    const { data: row, error } = await context.supabase.from("projects").insert({ ...data, user_id: context.userId }).select("*").single();
+    const { data: row, error } = await context.supabase.from("projects").insert(clean({ ...data, user_id: context.userId })).select("*").single();
     if (error || !row) fail("The project could not be saved.", error);
     return row!;
   });
@@ -68,7 +71,7 @@ export const updateProject = createServerFn({ method: "POST" })
   .inputValidator((i: unknown) => projectInput.partial().extend({ id }).parse(i))
   .handler(async ({ data, context }) => {
     const { id: pid, ...patch } = data;
-    const { data: row, error } = await context.supabase.from("projects").update(patch).eq("id", pid).select("*").single();
+    const { data: row, error } = await context.supabase.from("projects").update(clean(patch)).eq("id", pid).select("*").single();
     if (error || !row) fail("The project could not be updated.", error);
     return row!;
   });
@@ -111,7 +114,7 @@ export const createGoal = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((i: unknown) => goalInput.parse(i))
   .handler(async ({ data, context }) => {
-    const { data: row, error } = await context.supabase.from("goals").insert({ ...data, user_id: context.userId }).select("*").single();
+    const { data: row, error } = await context.supabase.from("goals").insert(clean({ ...data, user_id: context.userId })).select("*").single();
     if (error || !row) fail("The goal could not be saved.", error);
     return row!;
   });
@@ -121,7 +124,7 @@ export const updateGoal = createServerFn({ method: "POST" })
   .inputValidator((i: unknown) => goalInput.partial().extend({ id }).parse(i))
   .handler(async ({ data, context }) => {
     const { id: gid, ...patch } = data;
-    const { data: row, error } = await context.supabase.from("goals").update(patch).eq("id", gid).select("*").single();
+    const { data: row, error } = await context.supabase.from("goals").update(clean(patch)).eq("id", gid).select("*").single();
     if (error || !row) fail("The goal could not be updated.", error);
     return row!;
   });
@@ -139,7 +142,7 @@ export const addMilestone = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((i: unknown) => z.object({ goal_id: id, title: z.string().trim().min(1).max(200), due_date: dateStr.nullable().optional() }).parse(i))
   .handler(async ({ data, context }) => {
-    const { data: row, error } = await context.supabase.from("milestones").insert({ ...data, user_id: context.userId }).select("*").single();
+    const { data: row, error } = await context.supabase.from("milestones").insert(clean({ ...data, user_id: context.userId })).select("*").single();
     if (error || !row) fail("The milestone could not be saved.", error);
     return row!;
   });

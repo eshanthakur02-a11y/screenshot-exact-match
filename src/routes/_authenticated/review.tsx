@@ -18,7 +18,7 @@ const reviewQuery = (week_start: string) => queryOptions({ queryKey: ["review", 
 export const Route = createFileRoute("/_authenticated/review")({
   head: () => ({ meta: [{ title: "Weekly Review — AetherMind" }, { name: "description", content: "Look back on your week and plan the next." }] }),
   loader: ({ context }) => Promise.all([tasksQuery, projectsQuery, goalsQuery, shellQuery].map((q) => context.queryClient.ensureQueryData(q as typeof tasksQuery))),
-  errorComponent: ({ error }) => <p role="alert" className="text-destructive">{error.message}</p>,
+  errorComponent: ({ error }) => <p role="alert" className="text-destructive">{(error as Error).message}</p>,
   component: ReviewPage,
 });
 

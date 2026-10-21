@@ -55,10 +55,10 @@ export function activitySeries(tasks: T[], today: string, tz: string, days: numb
   const rows = keys.map((k) => ({ day: k, created: 0, completed: 0 }));
   for (const t of tasks) {
     const c = idx.get(dayKey(new Date(t.created_at), tz));
-    if (c !== undefined) rows[c].created++;
+    if (c !== undefined) rows[c]!.created++;
     if (t.completed_at) {
       const d = idx.get(dayKey(new Date(t.completed_at), tz));
-      if (d !== undefined) rows[d].completed++;
+      if (d !== undefined) rows[d]!.completed++;
     }
   }
   return rows;

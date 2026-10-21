@@ -21,7 +21,7 @@ export const Route = createFileRoute("/_authenticated/projects")({
   head: () => ({ meta: [{ title: "Projects — AetherMind" }, { name: "description", content: "Organize your work into projects." }] }),
   validateSearch: z.object({ new: z.boolean().optional() }),
   loader: ({ context }) => context.queryClient.ensureQueryData(projectsQuery),
-  errorComponent: ({ error }) => <p role="alert" className="text-destructive">{error.message}</p>,
+  errorComponent: ({ error }) => <p role="alert" className="text-destructive">{(error as Error).message}</p>,
   component: ProjectsPage,
 });
 
