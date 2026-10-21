@@ -267,7 +267,7 @@ function Laptop() {
               <div className="rounded-md border border-border bg-card p-2">
                 <p className="mb-1.5 font-semibold">Weekly progress</p>
                 <div className="flex h-14 items-end gap-1">
-                  {[22, 32, 28, 42, 52, 36, 24].map((h, i) => <div key={i} className="w-full rounded-sm bg-gradient-brand" style={{ height: h, opacity: i > 4 ? 0.4 : 1 }} />)}
+                  {[22, 32, 28, 42, 52, 36, 24].map((h, i) => <div key={i} className="w-full rounded-[2px] bg-gradient-brand" style={{ height: h, opacity: i > 4 ? 0.4 : 1 }} />)}
                 </div>
               </div>
               <div className="col-span-2 rounded-md border border-border bg-card p-2">
