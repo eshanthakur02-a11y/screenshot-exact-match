@@ -54,8 +54,10 @@ export const updateTask = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => taskUpdateSchema.parse(input))
   .handler(async ({ data, context }) => {
     const { id, due_date, ...rest } = data;
-    const patch: TablesUpdate<"tasks"> = { ...rest };
-    if (due_date !== undefined) patch.due_date = toTimestamp(due_date);
+    const patch = Object.fromEntries(
+      Object.entries(rest).filter(([, v]) => v !== undefined),
+    ) as TablesUpdate<"tasks">;
+    if (due_date !== undefined) patch.due_date = due_date === null ? null : `${due_date}T12:00:00Z`;
     if (rest.status) patch.completed_at = rest.status === "done" ? new Date().toISOString() : null;
     const { data: row, error } = await context.supabase
       .from("tasks")
