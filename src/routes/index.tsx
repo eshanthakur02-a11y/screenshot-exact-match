@@ -5,7 +5,7 @@ import {
   ArrowRight, BarChart3, Calendar, CheckCircle2, FileText, Folder, LayoutDashboard,
   Menu, Search, Sparkles, Target, X, Bell, Clock, Flag, Wand2, ListChecks, Brain, BookOpen,
 } from "lucide-react";
-import heroOrb from "@/assets/hero-orb.jpg";
+import { HeroSpline } from "@/components/hero-spline";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -93,7 +93,7 @@ function Landing() {
       {/* Hero */}
       <section id="product" className="relative">
         <div className="pointer-events-none absolute inset-0 -top-24">
-          <img src={heroOrb} alt="" width={1600} height={1104} className="absolute right-0 top-0 h-full w-full object-cover object-top opacity-70 lg:w-[70%]" />
+          <HeroSpline />
           <div className="absolute inset-0 bg-gradient-to-r from-background via-background/70 to-transparent" />
           <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-background to-transparent" />
         </div>
