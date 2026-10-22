@@ -1,5 +1,5 @@
-import { Component, lazy, Suspense, useEffect, useState, type ReactNode } from "react";
-import heroOrb from "@/assets/hero-orb.jpg";
+import { Component, lazy, Suspense, useCallback, useEffect, useRef, useState, type ReactNode } from "react";
+import type { Application } from "@splinetool/runtime";
 
 // Import the WebGL runtime only after the browser opts into the live scene.
 const Spline = lazy(() => import("@splinetool/react-spline"));
@@ -16,17 +16,31 @@ export function HeroSpline() {
   const [enabled, setEnabled] = useState(false);
   const [loaded, setLoaded] = useState(false);
   const [failed, setFailed] = useState(false);
+  const application = useRef<Application | null>(null);
+  const reducedMotion = useRef(false);
+
+  const handleLoad = useCallback((app: Application) => {
+    application.current = app;
+    if (reducedMotion.current) app.stop();
+    setLoaded(true);
+  }, []);
 
   useEffect(() => {
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const size = window.matchMedia("(min-width: 768px)");
-    const sync = () => setEnabled(size.matches && !motion.matches);
+    const sync = () => {
+      reducedMotion.current = motion.matches;
+      const app = application.current;
+      if (app) {
+        if (motion.matches) app.stop();
+        else app.play();
+      }
+    };
     sync();
+    setEnabled(true);
     motion.addEventListener("change", sync);
-    size.addEventListener("change", sync);
     return () => {
+      application.current = null;
       motion.removeEventListener("change", sync);
-      size.removeEventListener("change", sync);
     };
   }, []);
 
@@ -38,16 +52,16 @@ export function HeroSpline() {
 
   const live = enabled && !failed;
   return (
-    <div className="absolute inset-0 lg:left-[30%]" aria-hidden="true" data-spline-state={live ? (loaded ? "loaded" : "loading") : "static"}>
-      <img src={heroOrb} alt="" width={1600} height={1104}
-        className={`absolute inset-0 h-full w-full object-cover object-top opacity-70 ${live && loaded ? "invisible" : ""}`} />
+    <div className="absolute inset-0 bg-scene-background" aria-label="Interactive AetherMind 3D robot" data-spline-state={live ? (loaded ? "loaded" : "loading") : "static"}>
       {live && (
+        <div className="absolute inset-x-0 top-[20%] h-[55%] sm:top-[7%] sm:h-[78%]">
         <SceneBoundary onFailure={() => setFailed(true)}>
           <Suspense fallback={null}>
-            <Spline scene={SCENE_URL} onLoad={() => setLoaded(true)} renderOnDemand={false}
-              className={`pointer-events-auto absolute inset-0 h-full w-full -translate-y-12 lg:-translate-y-20 ${loaded ? "opacity-100" : "opacity-0"}`} />
+            <Spline scene={SCENE_URL} onLoad={handleLoad} renderOnDemand={false}
+              className={`pointer-events-auto absolute inset-0 h-full w-full ${loaded ? "opacity-100" : "opacity-0"}`} />
           </Suspense>
         </SceneBoundary>
+        </div>
       )}
     </div>
   );

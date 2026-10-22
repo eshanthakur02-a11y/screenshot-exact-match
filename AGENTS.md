@@ -14,5 +14,5 @@
 - AI provider calls live only in `src/lib/ai/*.server.ts`; output is validated with Zod schemas from `src/lib/task-schema.ts` before any write — provider can change without touching task logic.
 - AI capture never writes; the user confirms a draft, then `createTask` saves and returns the real row — no false success.
 - Keep `docs/MIGRATION.md` updated whenever schema, server functions, or external dependencies change.
-- Load the hero Spline runtime through a browser-enabled lazy component with an error boundary and bounded loading timeout; use the existing bitmap for mobile and reduced motion so SSR and essential controls never depend on WebGL.
-- Keep illustrative hero previews pointer-transparent except real links, and let Spline run authored Start/LookAt events continuously; no repeated manual animation triggers, because foreground hit-testing must not block cursor-following motion.
+- Load the full-viewport hero Spline runtime through a browser-enabled lazy component with an error boundary and bounded timeout on all screen sizes; use the black stage for loading/failure and pause the loaded scene for reduced motion so no decorative bitmap or overlay returns.
+- Let Spline run authored Start/LookAt events without manual replay; keep the robot stage free of foreground HTML and place the site's existing navigation and lower sections after it so canvas input is unobstructed.

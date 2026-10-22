@@ -2,8 +2,8 @@ import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion, useReducedMotion } from "motion/react";
 import {
-  ArrowRight, BarChart3, Calendar, CheckCircle2, FileText, Folder, LayoutDashboard,
-  Menu, Search, Sparkles, Target, X, Bell, Clock, Flag, Wand2, ListChecks, Brain, BookOpen,
+  ArrowRight, BarChart3, Calendar, FileText, Folder,
+  Menu, Sparkles, Target, X, Clock, Flag, Wand2,
 } from "lucide-react";
 import { HeroSpline } from "@/components/hero-spline";
 
@@ -60,14 +60,14 @@ function PrimaryLink({ children, className = "" }: { children: React.ReactNode; 
 function Landing() {
   const [open, setOpen] = useState(false);
   const reduce = useReducedMotion();
-  const fade = (d = 0) => ({
-    initial: reduce ? false : { opacity: 0, y: 16 },
-    animate: { opacity: 1, y: 0 },
-    transition: { duration: 0.7, delay: d, ease: [0.22, 1, 0.36, 1] as const },
-  });
+
 
   return (
     <div className="min-h-screen overflow-x-hidden bg-background text-foreground">
+      <section id="product" aria-label="AetherMind robot" className="relative h-dvh w-full overflow-hidden bg-scene-background">
+        <HeroSpline />
+      </section>
+
       {/* Nav */}
       <header className="relative z-30 mx-auto flex max-w-7xl items-center justify-between px-5 py-5 md:px-8">
         <Link to="/"><Logo /></Link>
@@ -89,68 +89,6 @@ function Landing() {
           </div>
         )}
       </header>
-
-      {/* Hero */}
-      <section id="product" className="relative">
-        <div className="pointer-events-none absolute inset-0 -top-24">
-          <HeroSpline />
-          <div className="absolute inset-0 bg-gradient-to-r from-background via-background/70 to-transparent" />
-          <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-background to-transparent" />
-        </div>
-
-        <div className="pointer-events-none relative mx-auto grid max-w-7xl items-center gap-12 px-5 pb-16 pt-8 md:px-8 lg:grid-cols-[1fr_1.15fr] lg:pt-14">
-          <div className="pointer-events-auto">
-            <motion.div {...fade(0)} className="glass inline-flex items-center gap-2 rounded-full px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.2em]">
-              <span className="h-2 w-2 rounded-full bg-primary shadow-glow" /> Personal AI Chief of Staff
-            </motion.div>
-            <motion.h1 {...fade(0.1)} className="mt-6 text-5xl font-semibold leading-[0.98] sm:text-6xl xl:text-7xl">
-              Say what<br />needs doing.<br />
-              <em className="text-gradient pr-2">We'll keep it in order.</em>
-            </motion.h1>
-            <motion.p {...fade(0.2)} className="mt-6 max-w-md text-lg leading-relaxed text-muted-foreground">
-              Turn everyday thoughts, tasks, and commitments into a clear plan. AetherMind helps you capture priorities, organize projects, and achieve what matters most.
-            </motion.p>
-            <motion.div {...fade(0.3)} className="mt-8 flex flex-wrap gap-4">
-              <PrimaryLink className="px-7 py-4">Get started <ArrowRight className="h-4 w-4" /></PrimaryLink>
-              <a href="#how" className="inline-flex items-center gap-2 rounded-xl border border-border bg-background/40 px-7 py-4 font-medium transition hover:bg-secondary">
-                See how it works
-              </a>
-            </motion.div>
-            <motion.p {...fade(0.4)} className="mt-6 text-sm text-muted-foreground">Built for students, creators and professionals.</motion.p>
-            <motion.dl {...fade(0.5)} className="mt-10 grid max-w-lg grid-cols-3 divide-x divide-border">
-              {[["Seconds", "From thought to task"], ["You decide", "Review before saving"], ["Private", "Only you see your data"]].map(([v, l]) => (
-                <div key={l} className="px-4 first:pl-0">
-                  <dt className="font-display text-2xl font-semibold">{v}</dt>
-                  <dd className="mt-1 text-xs text-muted-foreground">{l}</dd>
-                </div>
-              ))}
-            </motion.dl>
-          </div>
-
-          <motion.div {...fade(0.25)} className="relative lg:top-8">
-            <Laptop />
-            <div className="absolute -right-2 -bottom-4 hidden w-[24%] sm:block lg:-right-4"><Phone /></div>
-            <Link to="/auth" className="pointer-events-auto glass group absolute -bottom-16 right-[22%] hidden max-w-sm items-center gap-4 rounded-2xl p-4 shadow-glow transition hover:-translate-y-1 md:flex">
-              <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-brand"><Sparkles className="h-6 w-6 text-accent" /></span>
-              <span>
-                <span className="block font-semibold">AI Task Capture</span>
-                <span className="block text-sm text-muted-foreground">Turn your thoughts into structured, actionable tasks with AI.</span>
-              </span>
-              <ArrowRight className="h-5 w-5 shrink-0 transition group-hover:translate-x-1" />
-            </Link>
-          </motion.div>
-        </div>
-
-        <div className="relative mx-auto max-w-7xl px-5 pt-10 md:px-8">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-muted-foreground">Everything in one workspace</p>
-          <div className="mt-5 flex flex-wrap gap-x-10 gap-y-4 text-lg text-foreground/70">
-            {[[ListChecks, "Tasks"], [Folder, "Projects"], [Target, "Goals"], [Calendar, "Calendar"], [Brain, "AI Workspace"], [BookOpen, "Weekly Review"]].map(([I, l]) => {
-              const Icon = I as typeof Folder;
-              return <span key={l as string} className="inline-flex items-center gap-2"><Icon className="h-5 w-5" />{l as string}</span>;
-            })}
-          </div>
-        </div>
-      </section>
 
       {/* Features */}
       <section id="features" className="mx-auto max-w-7xl px-5 py-20 md:px-8">
@@ -228,76 +166,3 @@ function Landing() {
   );
 }
 
-/* ---------- Illustrative device previews (marketing only, not user data) ---------- */
-
-const PRIORITIES: [string, string][] = [["Complete AI assignment", "High"], ["Prepare project presentation", "High"], ["Review research paper", "Medium"], ["Plan next week", "Low"]];
-const tone: Record<string, string> = { High: "bg-priority-high/20 text-priority-high", Medium: "bg-priority-medium/20 text-priority-medium", Low: "bg-priority-low/20 text-priority-low" };
-
-function Laptop() {
-  return (
-    <div className="mx-auto w-full max-w-[720px]" aria-label="Illustrative AetherMind dashboard preview">
-      <div className="rounded-t-2xl border border-border bg-background p-2 shadow-glow">
-        <div className="flex overflow-hidden rounded-lg bg-background-2 text-[9px] sm:text-[10px]">
-          <aside className="hidden w-[22%] flex-col gap-1.5 border-r border-border p-3 sm:flex">
-            <Logo className="mb-2 text-sm" />
-            {[LayoutDashboard, ListChecks, Folder, Target, Calendar, Brain, BookOpen, FileText, BarChart3].map((I, i) => (
-              <span key={i} className={`flex items-center gap-1.5 rounded-md px-2 py-1 ${i === 0 ? "bg-primary/25" : "text-muted-foreground"}`}>
-                <I className="h-3 w-3" />{["Dashboard", "Tasks", "Projects", "Goals", "Calendar", "AI Workspace", "Weekly Review", "Documents", "Insights"][i]}
-              </span>
-            ))}
-          </aside>
-          <div className="flex-1 p-3">
-            <div className="flex items-center justify-between gap-2">
-              <span className="flex flex-1 items-center gap-1 rounded-md bg-card px-2 py-1 text-muted-foreground"><Search className="h-3 w-3" />Search anything…</span>
-              <Bell className="h-3 w-3" /><span className="h-5 w-5 rounded-full bg-gradient-brand" />
-            </div>
-            <p className="mt-3 font-display text-sm font-semibold sm:text-base">Good morning 👋</p>
-            <div className="mt-2 grid grid-cols-4 gap-2">
-              {[["12", "Open", "text-foreground"], ["3", "Due today", "text-magenta"], ["2", "Overdue", "text-priority-high"], ["8", "Done", "text-success"]].map(([n, l, c]) => (
-                <div key={l} className="rounded-md border border-border bg-card p-2"><p className={`text-base font-semibold ${c}`}>{n}</p><p className="text-muted-foreground">{l}</p></div>
-              ))}
-            </div>
-            <div className="mt-2 grid grid-cols-2 gap-2">
-              <div className="rounded-md border border-border bg-card p-2">
-                <p className="mb-1.5 font-semibold">Today's priorities</p>
-                {PRIORITIES.map(([t, p]) => (
-                  <div key={t} className="flex items-center justify-between py-0.5"><span className="flex items-center gap-1"><CheckCircle2 className="h-2.5 w-2.5 text-muted-foreground" />{t}</span><span className={`rounded px-1 ${tone[p]}`}>{p}</span></div>
-                ))}
-              </div>
-              <div className="rounded-md border border-border bg-card p-2">
-                <p className="mb-1.5 font-semibold">Weekly progress</p>
-                <div className="flex h-14 items-end gap-1">
-                  {[22, 32, 28, 42, 52, 36, 24].map((h, i) => <div key={i} className="w-full rounded-[2px] bg-gradient-brand" style={{ height: h, opacity: i > 4 ? 0.4 : 1 }} />)}
-                </div>
-              </div>
-              <div className="col-span-2 rounded-md border border-border bg-card p-2">
-                <p className="mb-1.5 font-semibold">Active projects</p>
-                {[["Generative AI Portfolio", 66], ["College Projects", 50], ["Personal Growth", 33]].map(([t, v]) => (
-                  <div key={t} className="flex items-center gap-2 py-0.5"><span className="w-1/3 truncate">{t}</span><span className="h-1 flex-1 rounded-full bg-muted"><span className="block h-1 rounded-full bg-gradient-brand" style={{ width: `${v}%` }} /></span><span>{v}%</span></div>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="mx-auto h-3 w-[108%] -translate-x-[3.7%] rounded-b-2xl border border-border bg-gradient-to-b from-muted to-background" />
-    </div>
-  );
-}
-
-function Phone() {
-  return (
-    <div className="animate-float rounded-[1.6rem] border-2 border-primary/40 bg-background p-1.5 shadow-glow">
-      <div className="rounded-[1.3rem] bg-background-2 p-2.5 text-[8px]">
-        <p className="font-display text-xs font-semibold">Good morning 👋</p>
-        <div className="mt-2 flex gap-1"><span className="rounded-full bg-magenta/30 px-2 py-0.5">Today</span><span className="rounded-full bg-card px-2 py-0.5">Upcoming</span></div>
-        <div className="mt-2 space-y-1">
-          {PRIORITIES.map(([t, p]) => (
-            <div key={t} className="flex items-center justify-between rounded-md bg-card px-1.5 py-1"><span className="truncate">{t}</span><span className={`rounded px-1 ${tone[p]}`}>{p}</span></div>
-          ))}
-        </div>
-        <div className="mt-2 flex justify-end"><span className="flex h-6 w-6 items-center justify-center rounded-full bg-accent text-accent-foreground">+</span></div>
-      </div>
-    </div>
-  );
-}
