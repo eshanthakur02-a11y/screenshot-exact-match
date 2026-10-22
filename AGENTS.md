@@ -15,3 +15,4 @@
 - AI capture never writes; the user confirms a draft, then `createTask` saves and returns the real row — no false success.
 - Keep `docs/MIGRATION.md` updated whenever schema, server functions, or external dependencies change.
 - Load the hero Spline runtime through a browser-enabled lazy component with an error boundary and bounded loading timeout; use the existing bitmap for mobile and reduced motion so SSR and essential controls never depend on WebGL.
+- Keep illustrative hero previews pointer-transparent except real links, and let Spline run authored Start/LookAt events continuously; no repeated manual animation triggers, because foreground hit-testing must not block cursor-following motion.

@@ -98,8 +98,8 @@ function Landing() {
           <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-background to-transparent" />
         </div>
 
-        <div className="relative mx-auto grid max-w-7xl items-center gap-12 px-5 pb-16 pt-8 md:px-8 lg:grid-cols-[1fr_1.15fr] lg:pt-14">
-          <div>
+        <div className="pointer-events-none relative mx-auto grid max-w-7xl items-center gap-12 px-5 pb-16 pt-8 md:px-8 lg:grid-cols-[1fr_1.15fr] lg:pt-14">
+          <div className="pointer-events-auto">
             <motion.div {...fade(0)} className="glass inline-flex items-center gap-2 rounded-full px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.2em]">
               <span className="h-2 w-2 rounded-full bg-primary shadow-glow" /> Personal AI Chief of Staff
             </motion.div>
@@ -127,10 +127,10 @@ function Landing() {
             </motion.dl>
           </div>
 
-          <motion.div {...fade(0.25)} className="relative">
+          <motion.div {...fade(0.25)} className="relative lg:top-8">
             <Laptop />
             <div className="absolute -right-2 -bottom-4 hidden w-[24%] sm:block lg:-right-4"><Phone /></div>
-            <Link to="/auth" className="glass group absolute -bottom-16 right-[22%] hidden max-w-sm items-center gap-4 rounded-2xl p-4 shadow-glow transition hover:-translate-y-1 md:flex">
+            <Link to="/auth" className="pointer-events-auto glass group absolute -bottom-16 right-[22%] hidden max-w-sm items-center gap-4 rounded-2xl p-4 shadow-glow transition hover:-translate-y-1 md:flex">
               <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-gradient-brand"><Sparkles className="h-6 w-6 text-accent" /></span>
               <span>
                 <span className="block font-semibold">AI Task Capture</span>
