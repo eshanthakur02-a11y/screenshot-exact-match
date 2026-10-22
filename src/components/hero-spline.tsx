@@ -44,8 +44,8 @@ export function HeroSpline() {
       {live && (
         <SceneBoundary onFailure={() => setFailed(true)}>
           <Suspense fallback={null}>
-            <Spline scene={SCENE_URL} onLoad={() => setLoaded(true)} renderOnDemand
-              className={`pointer-events-auto absolute inset-0 h-full w-full ${loaded ? "opacity-100" : "opacity-0"}`} />
+            <Spline scene={SCENE_URL} onLoad={() => setLoaded(true)} renderOnDemand={false}
+              className={`pointer-events-auto absolute inset-0 h-full w-full -translate-y-12 lg:-translate-y-20 ${loaded ? "opacity-100" : "opacity-0"}`} />
           </Suspense>
         </SceneBoundary>
       )}
