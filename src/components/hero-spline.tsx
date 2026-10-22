@@ -54,12 +54,14 @@ export function HeroSpline() {
   return (
     <div className="absolute inset-0 bg-scene-background" aria-label="Interactive AetherMind 3D robot" data-spline-state={live ? (loaded ? "loaded" : "loading") : "static"}>
       {live && (
+        <div className="absolute inset-x-0 top-[20%] h-[55%] sm:top-[7%] sm:h-[78%]">
         <SceneBoundary onFailure={() => setFailed(true)}>
           <Suspense fallback={null}>
             <Spline scene={SCENE_URL} onLoad={handleLoad} renderOnDemand={false}
-              className={`pointer-events-auto absolute inset-x-0 top-[20%] h-[55%] w-full sm:top-[7%] sm:h-[78%] ${loaded ? "opacity-100" : "opacity-0"}`} />
+              className={`pointer-events-auto absolute inset-0 h-full w-full ${loaded ? "opacity-100" : "opacity-0"}`} />
           </Suspense>
         </SceneBoundary>
+        </div>
       )}
     </div>
   );
