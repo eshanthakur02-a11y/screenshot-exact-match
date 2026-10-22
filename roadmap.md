@@ -1,5 +1,5 @@
 # AetherMind roadmap
-- [ ] Integrate supplied Spline scene into the existing hero; verify desktop, tablet, mobile, loading and fallback.
+- [x] Integrate supplied Spline scene into the existing hero; verified desktop, tablet, mobile, loading, reduced motion, failure fallback and Get started navigation.
 - [x] Stage 1: Auth + profile (email/password)
 - [x] Stage 2: Dashboard with real data
 - [x] Stage 3: AI Task Capture (review before save)

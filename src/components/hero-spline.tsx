@@ -6,10 +6,10 @@ const Spline = lazy(() => import("@splinetool/react-spline"));
 const SCENE_URL = "https://prod.spline.design/38OnHj7aK4PmVYp8/scene.splinecode";
 
 class SceneBoundary extends Component<{ children: ReactNode; onFailure: () => void }, { failed: boolean }> {
-  state = { failed: false };
+  override state = { failed: false };
   static getDerivedStateFromError() { return { failed: true }; }
-  componentDidCatch() { this.props.onFailure(); }
-  render() { return this.state.failed ? null : this.props.children; }
+  override componentDidCatch() { this.props.onFailure(); }
+  override render() { return this.state.failed ? null : this.props.children; }
 }
 
 export function HeroSpline() {
