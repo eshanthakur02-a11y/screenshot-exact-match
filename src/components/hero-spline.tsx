@@ -19,18 +19,11 @@ export function HeroSpline() {
   const application = useRef<Application | null>(null);
   const reducedMotion = useRef(false);
 
-  const fitScene = useCallback((app: Application) => {
-    const stage = document.getElementById("product");
-    if (!stage) return;
-    app.setZoom(stage.clientWidth < 640 ? 0.48 : 0.75);
-  }, []);
-
   const handleLoad = useCallback((app: Application) => {
     application.current = app;
-    fitScene(app);
     if (reducedMotion.current) app.stop();
     setLoaded(true);
-  }, [fitScene]);
+  }, []);
 
   useEffect(() => {
     const motion = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -44,18 +37,12 @@ export function HeroSpline() {
     };
     sync();
     setEnabled(true);
-    const resize = () => {
-      const app = application.current;
-      if (app) fitScene(app);
-    };
-    window.addEventListener("resize", resize);
     motion.addEventListener("change", sync);
     return () => {
       application.current = null;
-      window.removeEventListener("resize", resize);
       motion.removeEventListener("change", sync);
     };
-  }, [fitScene]);
+  }, []);
 
   useEffect(() => {
     if (!enabled || loaded || failed) return;
@@ -70,7 +57,7 @@ export function HeroSpline() {
         <SceneBoundary onFailure={() => setFailed(true)}>
           <Suspense fallback={null}>
             <Spline scene={SCENE_URL} onLoad={handleLoad} renderOnDemand={false}
-              className={`pointer-events-auto absolute inset-0 h-full w-full ${loaded ? "opacity-100" : "opacity-0"}`} />
+              className={`pointer-events-auto absolute inset-x-0 top-[20%] h-[55%] w-full sm:top-[7%] sm:h-[78%] ${loaded ? "opacity-100" : "opacity-0"}`} />
           </Suspense>
         </SceneBoundary>
       )}
