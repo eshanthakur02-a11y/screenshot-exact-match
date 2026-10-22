@@ -1,4 +1,5 @@
 # AetherMind roadmap
+- [ ] Replace hero with a full-screen black robot-only scene; preserve lower sections and verify desktop, tablet, mobile and pointer motion.
 - [x] Diagnose Spline playback, update eligible runtime, expose configured robot motion and verify desktop/tablet pointer input, mobile fallback and real links without altering the design.
 - [ ] Remove remaining Spline export-version warning — newer runtime releases are temporarily blocked by the package release-age safety policy; newest eligible version renders the scene and verified motion.
 - [x] Integrate supplied Spline scene into the existing hero; verified desktop, tablet, mobile, loading, reduced motion, failure fallback and Get started navigation.

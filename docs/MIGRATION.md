@@ -80,6 +80,6 @@ createBriefing — AI daily briefing via src/lib/ai/briefing.server.ts, not pers
 
 ## Hero 3D dependency
 - `@splinetool/react-spline` and `@splinetool/runtime` render the user's scene at `https://prod.spline.design/38OnHj7aK4PmVYp8/scene.splinecode` in `src/components/hero-spline.tsx`.
-- Browser-only lazy rendering; the existing hero image remains during loading, on errors, after a 30-second timeout, on mobile, and for reduced motion. No data access or schema changes.
+- Browser-only lazy rendering on every screen size in a full-viewport black stage; loading/failure leaves a black background with no overlays. Reduced motion pauses the loaded original scene. No data access or schema changes.
 - When migrating hosting, keep the scene URL reachable or change the component's scene URL to a hosted export of the supplied `scene.splinecode`; do not embed the binary in the repository.
-- Runtime updated to `2.0.100` (newest version eligible under the package release-age policy during this fix). The exported scene has Start transitions and cursor-target LookAt events; render continuously and keep illustrative HTML pointer-transparent. No manual replay or invented looping animation is added.
+- Runtime updated to `2.0.100` (newest version eligible under the package release-age policy during this fix). The exported scene has Start transitions and cursor-target LookAt events; render continuously with no foreground hero HTML. No manual replay or invented looping animation is added.
