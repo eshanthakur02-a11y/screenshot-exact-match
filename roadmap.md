@@ -1,5 +1,6 @@
 # AetherMind roadmap
-- [ ] Diagnose Spline playback, update incompatible runtime, expose configured robot motion and verify interaction without altering the design.
+- [x] Diagnose Spline playback, update eligible runtime, expose configured robot motion and verify desktop/tablet pointer input, mobile fallback and real links without altering the design.
+- [ ] Remove remaining Spline export-version warning — newer runtime releases are temporarily blocked by the package release-age safety policy; newest eligible version renders the scene and verified motion.
 - [x] Integrate supplied Spline scene into the existing hero; verified desktop, tablet, mobile, loading, reduced motion, failure fallback and Get started navigation.
 - [x] Stage 1: Auth + profile (email/password)
 - [x] Stage 2: Dashboard with real data
