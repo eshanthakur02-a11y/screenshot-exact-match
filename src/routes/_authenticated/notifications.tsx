@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 const notesQuery = queryOptions({ queryKey: ["notifications"], queryFn: () => listNotifications() });
 
 export const Route = createFileRoute("/_authenticated/notifications")({
-  head: () => ({ meta: [{ title: "Notifications — AetherMind" }, { name: "description", content: "Your in-app notifications." }] }),
+  head: () => ({ meta: [{ title: "Notifications — AetherMind" }, { name: "description", content: "Your in-app notifications." }, { property: "og:title", content: "Notifications — AetherMind" }, { property: "og:description", content: "Your in-app notifications." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   loader: ({ context }) => context.queryClient.ensureQueryData(notesQuery),
   errorComponent: ({ error }) => <p role="alert" className="text-destructive">{(error as Error).message}</p>,
   component: NotificationsPage,

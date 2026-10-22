@@ -21,7 +21,7 @@ const projectsQuery = queryOptions({ queryKey: ["projects"], queryFn: () => list
 const goalsQuery = queryOptions({ queryKey: ["goals"], queryFn: () => listGoals() });
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
-  head: () => ({ meta: [{ title: "Dashboard — AetherMind" }, { name: "description", content: "Your AetherMind productivity overview." }] }),
+  head: () => ({ meta: [{ title: "Dashboard — AetherMind" }, { name: "description", content: "Your AetherMind productivity overview." }, { property: "og:title", content: "Dashboard — AetherMind" }, { property: "og:description", content: "Your AetherMind productivity overview." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   loader: ({ context }) =>
     Promise.all([dashboardQuery, projectsQuery, goalsQuery, shellQuery].map((q) => context.queryClient.ensureQueryData(q as typeof dashboardQuery))),
   pendingComponent: DashboardSkeleton,

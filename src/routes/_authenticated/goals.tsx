@@ -18,7 +18,7 @@ const goalsQuery = queryOptions({ queryKey: ["goals"], queryFn: () => listGoals(
 type Goal = Awaited<ReturnType<typeof listGoals>>[number];
 
 export const Route = createFileRoute("/_authenticated/goals")({
-  head: () => ({ meta: [{ title: "Goals — AetherMind" }, { name: "description", content: "Break big goals into milestones." }] }),
+  head: () => ({ meta: [{ title: "Goals — AetherMind" }, { name: "description", content: "Break big goals into milestones." }, { property: "og:title", content: "Goals — AetherMind" }, { property: "og:description", content: "Break big goals into milestones." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   validateSearch: z.object({ new: z.boolean().optional() }),
   loader: ({ context }) => context.queryClient.ensureQueryData(goalsQuery),
   errorComponent: ({ error }) => <p role="alert" className="text-destructive">{(error as Error).message}</p>,

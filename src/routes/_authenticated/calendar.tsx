@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils";
 const tasksQuery = queryOptions({ queryKey: ["tasks"], queryFn: () => listTasks() });
 
 export const Route = createFileRoute("/_authenticated/calendar")({
-  head: () => ({ meta: [{ title: "Calendar — AetherMind" }, { name: "description", content: "Your task deadlines by day, week and month." }] }),
+  head: () => ({ meta: [{ title: "Calendar — AetherMind" }, { name: "description", content: "Your task deadlines by day, week and month." }, { property: "og:title", content: "Calendar — AetherMind" }, { property: "og:description", content: "Your task deadlines by day, week and month." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   loader: ({ context }) => Promise.all([context.queryClient.ensureQueryData(tasksQuery), context.queryClient.ensureQueryData(shellQuery)]),
   errorComponent: ({ error }) => <p role="alert" className="text-destructive">{(error as Error).message}</p>,
   component: CalendarPage,

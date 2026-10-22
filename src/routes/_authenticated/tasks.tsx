@@ -19,7 +19,7 @@ const tasksQuery = queryOptions({ queryKey: ["tasks"], queryFn: () => listTasks(
 export const projectsQuery = queryOptions({ queryKey: ["projects"], queryFn: () => listProjects() });
 
 export const Route = createFileRoute("/_authenticated/tasks")({
-  head: () => ({ meta: [{ title: "Tasks — AetherMind" }] }),
+  head: () => ({ meta: [{ title: "Tasks — AetherMind" }, { name: "description", content: "Manage your AetherMind tasks and priorities." }, { property: "og:title", content: "Tasks — AetherMind" }, { property: "og:description", content: "Manage your AetherMind tasks and priorities." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   validateSearch: z.object({
     q: z.string().optional(),
     new: z.boolean().optional(),
