@@ -77,3 +77,8 @@ getShell, updateProfile; listProjects/createProject/updateProject/deleteProject 
 listGoals/createGoal/updateGoal/deleteGoal, addMilestone/setMilestoneDone/deleteMilestone (progress = done/total milestones, achieved = 100%);
 listNotifications/markNotifications/deleteNotification; getWeeklyReview/saveWeeklyReview (upsert per user+week);
 createBriefing — AI daily briefing via src/lib/ai/briefing.server.ts, not persisted. No schema changes.
+
+## Hero 3D dependency
+- `@splinetool/react-spline` and `@splinetool/runtime` render the user's scene at `https://prod.spline.design/38OnHj7aK4PmVYp8/scene.splinecode` in `src/components/hero-spline.tsx`.
+- Browser-only lazy rendering; the existing hero image remains during loading, on errors, after a 30-second timeout, on mobile, and for reduced motion. No data access or schema changes.
+- When migrating hosting, keep the scene URL reachable or change the component's scene URL to a hosted export of the supplied `scene.splinecode`; do not embed the binary in the repository.

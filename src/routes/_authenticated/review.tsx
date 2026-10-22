@@ -16,7 +16,7 @@ const goalsQuery = queryOptions({ queryKey: ["goals"], queryFn: () => listGoals(
 const reviewQuery = (week_start: string) => queryOptions({ queryKey: ["review", week_start], queryFn: () => getWeeklyReview({ data: { week_start } }) });
 
 export const Route = createFileRoute("/_authenticated/review")({
-  head: () => ({ meta: [{ title: "Weekly Review — AetherMind" }, { name: "description", content: "Look back on your week and plan the next." }] }),
+  head: () => ({ meta: [{ title: "Weekly Review — AetherMind" }, { name: "description", content: "Look back on your week and plan the next." }, { property: "og:title", content: "Weekly Review — AetherMind" }, { property: "og:description", content: "Look back on your week and plan the next." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   loader: ({ context }) => Promise.all([tasksQuery, projectsQuery, goalsQuery, shellQuery].map((q) => context.queryClient.ensureQueryData(q as typeof tasksQuery))),
   errorComponent: ({ error }) => <p role="alert" className="text-destructive">{(error as Error).message}</p>,
   component: ReviewPage,

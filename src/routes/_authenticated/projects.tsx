@@ -18,7 +18,7 @@ type Project = Awaited<ReturnType<typeof listProjects>>[number];
 const STATUS = ["active", "on_hold", "completed", "archived"] as const;
 
 export const Route = createFileRoute("/_authenticated/projects")({
-  head: () => ({ meta: [{ title: "Projects — AetherMind" }, { name: "description", content: "Organize your work into projects." }] }),
+  head: () => ({ meta: [{ title: "Projects — AetherMind" }, { name: "description", content: "Organize your work into projects." }, { property: "og:title", content: "Projects — AetherMind" }, { property: "og:description", content: "Organize your work into projects." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   validateSearch: z.object({ new: z.boolean().optional() }),
   loader: ({ context }) => context.queryClient.ensureQueryData(projectsQuery),
   errorComponent: ({ error }) => <p role="alert" className="text-destructive">{(error as Error).message}</p>,

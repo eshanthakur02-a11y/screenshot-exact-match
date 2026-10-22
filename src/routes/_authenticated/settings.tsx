@@ -12,7 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 
 export const Route = createFileRoute("/_authenticated/settings")({
-  head: () => ({ meta: [{ title: "Settings — AetherMind" }, { name: "description", content: "Your profile and preferences." }] }),
+  head: () => ({ meta: [{ title: "Settings — AetherMind" }, { name: "description", content: "Your profile and preferences." }, { property: "og:title", content: "Settings — AetherMind" }, { property: "og:description", content: "Your profile and preferences." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }),
   loader: ({ context }) => context.queryClient.ensureQueryData(shellQuery),
   component: SettingsPage,
 });
