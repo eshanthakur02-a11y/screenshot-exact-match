@@ -8,7 +8,6 @@ import { listDocuments, getDocument, savePastedDocument, analyseDocument } from 
 import { createTask } from "@/lib/data/tasks.functions";
 import { documentCandidateSchema, type DocumentCandidate, PRIORITIES } from "@/lib/task-schema";
 import { authenticatedUpload } from "@/lib/upload-client";
-import { WorkspaceNavigation } from "@/components/workspace-navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -20,7 +19,7 @@ const documentsQuery = queryOptions({ queryKey:["documents"], queryFn: () => lis
 export const Route = createFileRoute("/_authenticated/documents")({
   head: () => ({ meta:[{ title:"Documents — AetherMind" },{ name:"description",content:"Extract and confirm action items from your private documents and meeting notes." },{ property:"og:title",content:"Documents — AetherMind" },{ property:"og:description",content:"Extract and confirm action items from private documents and meeting notes." },{ property:"og:type",content:"website" },{ name:"twitter:card",content:"summary" }] }),
   loader: ({ context }) => context.queryClient.ensureQueryData(documentsQuery),
-  errorComponent: ({ error }) => <p role="alert" className="text-destructive">{error.message}</p>, component: DocumentsPage,
+  errorComponent: ({ error }) => <p role="alert" className="text-destructive">{error instanceof Error ? error.message : "Could not load documents."}</p>, component: DocumentsPage,
 });
 type CandidateRow = { index: number; selected: boolean; item: DocumentCandidate; savedTitle?: string };
 function DocumentsPage() {
@@ -57,7 +56,6 @@ function DocumentsPage() {
     if(failures.length) setError(failures.join("\n"));
   }
   return <div className="space-y-6">
-    <WorkspaceNavigation />
     <h1 className="text-4xl font-semibold">Documents & meeting notes</h1>
     <div className="flex flex-wrap gap-2">{documents.map((d) => <Button key={d.id} variant={docId===d.id?"secondary":"outline"} disabled={busy} onClick={() => run(() => load(d.id))}><FileText />{d.name}</Button>)}</div>
     <section className="space-y-4 border-b border-border pb-6">

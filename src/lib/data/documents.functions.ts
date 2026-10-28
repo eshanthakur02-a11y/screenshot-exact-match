@@ -26,7 +26,7 @@ export const savePastedDocument = createServerFn({ method: "POST" }).middleware(
     const { data: row, error } = await context.supabase.from("documents").upsert({ user_id: context.userId, name: data.name, content: data.text, content_hash: hash, reference_date: data.reference_date }, { onConflict: "user_id,content_hash", ignoreDuplicates: true }).select("id").maybeSingle();
     if (error) throw new Error("Could not save the source document.");
     if (row) return row;
-    const existing = await context.supabase.from("documents").select("id").eq("content_hash", hash).single();
+    const existing = await context.supabase.from("documents").select("id").eq("user_id", context.userId).eq("content_hash", hash).single();
     if (existing.error || !existing.data) throw new Error("Could not reopen the existing source.");
     return existing.data;
   });
