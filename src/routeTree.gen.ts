@@ -14,12 +14,16 @@ import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedCalendarRouteImport } from './routes/_authenticated/calendar'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
+import { Route as AuthenticatedDocumentsRouteImport } from './routes/_authenticated/documents'
 import { Route as AuthenticatedGoalsRouteImport } from './routes/_authenticated/goals'
 import { Route as AuthenticatedNotificationsRouteImport } from './routes/_authenticated/notifications'
 import { Route as AuthenticatedProjectsRouteImport } from './routes/_authenticated/projects'
 import { Route as AuthenticatedReviewRouteImport } from './routes/_authenticated/review'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedTasksRouteImport } from './routes/_authenticated/tasks'
+import { Route as ApiDocumentsRouteImport } from './routes/api/documents'
+import { Route as ApiTranscribeRouteImport } from './routes/api/transcribe'
+import { Route as ApiPublicJobsRemindersRouteImport } from './routes/api/public/jobs/reminders'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -43,6 +47,11 @@ const AuthenticatedCalendarRoute = AuthenticatedCalendarRouteImport.update({
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedDocumentsRoute = AuthenticatedDocumentsRouteImport.update({
+  id: '/documents',
+  path: '/documents',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 const AuthenticatedGoalsRoute = AuthenticatedGoalsRouteImport.update({
@@ -76,30 +85,53 @@ const AuthenticatedTasksRoute = AuthenticatedTasksRouteImport.update({
   path: '/tasks',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ApiDocumentsRoute = ApiDocumentsRouteImport.update({
+  id: '/api/documents',
+  path: '/api/documents',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiTranscribeRoute = ApiTranscribeRouteImport.update({
+  id: '/api/transcribe',
+  path: '/api/transcribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiPublicJobsRemindersRoute = ApiPublicJobsRemindersRouteImport.update({
+  id: '/api/public/jobs/reminders',
+  path: '/api/public/jobs/reminders',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/calendar': typeof AuthenticatedCalendarRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/documents': typeof AuthenticatedDocumentsRoute
   '/goals': typeof AuthenticatedGoalsRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/projects': typeof AuthenticatedProjectsRoute
   '/review': typeof AuthenticatedReviewRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/tasks': typeof AuthenticatedTasksRoute
+  '/api/documents': typeof ApiDocumentsRoute
+  '/api/transcribe': typeof ApiTranscribeRoute
+  '/api/public/jobs/reminders': typeof ApiPublicJobsRemindersRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
   '/calendar': typeof AuthenticatedCalendarRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/documents': typeof AuthenticatedDocumentsRoute
   '/goals': typeof AuthenticatedGoalsRoute
   '/notifications': typeof AuthenticatedNotificationsRoute
   '/projects': typeof AuthenticatedProjectsRoute
   '/review': typeof AuthenticatedReviewRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/tasks': typeof AuthenticatedTasksRoute
+  '/api/documents': typeof ApiDocumentsRoute
+  '/api/transcribe': typeof ApiTranscribeRoute
+  '/api/public/jobs/reminders': typeof ApiPublicJobsRemindersRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -108,12 +140,16 @@ export interface FileRoutesById {
   '/auth': typeof AuthRoute
   '/_authenticated/calendar': typeof AuthenticatedCalendarRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/documents': typeof AuthenticatedDocumentsRoute
   '/_authenticated/goals': typeof AuthenticatedGoalsRoute
   '/_authenticated/notifications': typeof AuthenticatedNotificationsRoute
   '/_authenticated/projects': typeof AuthenticatedProjectsRoute
   '/_authenticated/review': typeof AuthenticatedReviewRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/tasks': typeof AuthenticatedTasksRoute
+  '/api/documents': typeof ApiDocumentsRoute
+  '/api/transcribe': typeof ApiTranscribeRoute
+  '/api/public/jobs/reminders': typeof ApiPublicJobsRemindersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -122,24 +158,32 @@ export interface FileRouteTypes {
     | '/auth'
     | '/calendar'
     | '/dashboard'
+    | '/documents'
     | '/goals'
     | '/notifications'
     | '/projects'
     | '/review'
     | '/settings'
     | '/tasks'
+    | '/api/documents'
+    | '/api/transcribe'
+    | '/api/public/jobs/reminders'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/auth'
     | '/calendar'
     | '/dashboard'
+    | '/documents'
     | '/goals'
     | '/notifications'
     | '/projects'
     | '/review'
     | '/settings'
     | '/tasks'
+    | '/api/documents'
+    | '/api/transcribe'
+    | '/api/public/jobs/reminders'
   id:
     | '__root__'
     | '/'
@@ -147,18 +191,25 @@ export interface FileRouteTypes {
     | '/auth'
     | '/_authenticated/calendar'
     | '/_authenticated/dashboard'
+    | '/_authenticated/documents'
     | '/_authenticated/goals'
     | '/_authenticated/notifications'
     | '/_authenticated/projects'
     | '/_authenticated/review'
     | '/_authenticated/settings'
     | '/_authenticated/tasks'
+    | '/api/documents'
+    | '/api/transcribe'
+    | '/api/public/jobs/reminders'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  ApiDocumentsRoute: typeof ApiDocumentsRoute
+  ApiTranscribeRoute: typeof ApiTranscribeRoute
+  ApiPublicJobsRemindersRoute: typeof ApiPublicJobsRemindersRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -196,6 +247,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/dashboard'
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/documents': {
+      id: '/_authenticated/documents'
+      path: '/documents'
+      fullPath: '/documents'
+      preLoaderRoute: typeof AuthenticatedDocumentsRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
     '/_authenticated/goals': {
@@ -240,12 +298,34 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTasksRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/documents': {
+      id: '/api/documents'
+      path: '/api/documents'
+      fullPath: '/api/documents'
+      preLoaderRoute: typeof ApiDocumentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/transcribe': {
+      id: '/api/transcribe'
+      path: '/api/transcribe'
+      fullPath: '/api/transcribe'
+      preLoaderRoute: typeof ApiTranscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/public/jobs/reminders': {
+      id: '/api/public/jobs/reminders'
+      path: '/api/public/jobs/reminders'
+      fullPath: '/api/public/jobs/reminders'
+      preLoaderRoute: typeof ApiPublicJobsRemindersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedCalendarRoute: typeof AuthenticatedCalendarRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedDocumentsRoute: typeof AuthenticatedDocumentsRoute
   AuthenticatedGoalsRoute: typeof AuthenticatedGoalsRoute
   AuthenticatedNotificationsRoute: typeof AuthenticatedNotificationsRoute
   AuthenticatedProjectsRoute: typeof AuthenticatedProjectsRoute
@@ -257,6 +337,7 @@ interface AuthenticatedRouteRouteChildren {
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedCalendarRoute: AuthenticatedCalendarRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedDocumentsRoute: AuthenticatedDocumentsRoute,
   AuthenticatedGoalsRoute: AuthenticatedGoalsRoute,
   AuthenticatedNotificationsRoute: AuthenticatedNotificationsRoute,
   AuthenticatedProjectsRoute: AuthenticatedProjectsRoute,
@@ -272,6 +353,9 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  ApiDocumentsRoute: ApiDocumentsRoute,
+  ApiTranscribeRoute: ApiTranscribeRoute,
+  ApiPublicJobsRemindersRoute: ApiPublicJobsRemindersRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

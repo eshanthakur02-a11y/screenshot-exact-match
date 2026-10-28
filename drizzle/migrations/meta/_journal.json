@@ -8,6 +8,20 @@
       "when": 1792606239650,
       "tag": "0000_migration",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1793162528217,
+      "tag": "0001_review_documents_reminder_foundation",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1793163256264,
+      "tag": "0002_prevent_reminder_batch_starvation",
+      "breakpoints": true
     }
   ]
 }

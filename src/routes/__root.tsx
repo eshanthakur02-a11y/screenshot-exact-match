@@ -8,9 +8,10 @@ import {
   Scripts,
   type ErrorComponentProps,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Toaster } from "@/components/ui/sonner";
 import { supabase } from "@/integrations/supabase/client";
+import { NotificationUpdates } from "@/components/notification-updates";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -81,7 +82,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "AetherMind — Personal AI Chief of Staff" },
-      { name: "description", content: "Turn plain sentences into organised tasks, projects and goals." },
+      {
+        name: "description",
+        content: "Turn plain sentences into organised tasks, projects and goals.",
+      },
     ],
     links: [
       {
@@ -120,9 +124,12 @@ function RootShell({ children }: { children: ReactNode }) {
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const router = useRouter();
+  const [notificationUser, setNotificationUser] = useState<string | null>(null);
 
   useEffect(() => {
-    const { data } = supabase.auth.onAuthStateChange((event) => {
+    const { data } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "INITIAL_SESSION" || event === "SIGNED_IN" || event === "SIGNED_OUT")
+        setNotificationUser(session?.user.id ?? null);
       if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
       router.invalidate();
       if (event !== "SIGNED_OUT") queryClient.invalidateQueries();
@@ -132,6 +139,7 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
+      {notificationUser && <NotificationUpdates userId={notificationUser} />}
       {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
       <Outlet />
       <Toaster richColors position="top-center" />
