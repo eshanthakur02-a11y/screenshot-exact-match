@@ -65,12 +65,10 @@ export async function uploadDocument(request: Request) {
     if (existing.error) throw new Error("Could not check for an earlier upload.");
     if (existing.data) return Response.json(existing.data);
     const path = `${userId}/${hash}-${crypto.randomUUID()}.${ext}`;
-    const stored = await db.storage
-      .from("source-documents")
-      .upload(path, file, {
-        contentType: ext === "pdf" ? "application/pdf" : "text/plain",
-        upsert: false,
-      });
+    const stored = await db.storage.from("source-documents").upload(path, file, {
+      contentType: ext === "pdf" ? "application/pdf" : "text/plain",
+      upsert: false,
+    });
     if (stored.error) throw new Error("The private source file could not be stored.");
     const inserted = await db
       .from("documents")

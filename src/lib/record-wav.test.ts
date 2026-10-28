@@ -6,7 +6,10 @@ it("encodes a complete PCM WAV recording", async () => {
   expect(blob.size).toBe(50);
   const bytes = await new Promise<ArrayBuffer>((resolve, reject) => {
     const reader = new FileReader();
-    reader.onload = () => reader.result instanceof ArrayBuffer ? resolve(reader.result) : reject(new Error("Expected WAV bytes"));
+    reader.onload = () =>
+      reader.result instanceof ArrayBuffer
+        ? resolve(reader.result)
+        : reject(new Error("Expected WAV bytes"));
     reader.onerror = () => reject(reader.error);
     reader.readAsArrayBuffer(blob);
   });
