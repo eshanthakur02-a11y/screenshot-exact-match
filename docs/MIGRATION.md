@@ -7,7 +7,7 @@ Status legend: **Implemented** (code exists) · **Tested** (verified in this env
 - Auth: email/password (email confirmation ON). No social providers yet.
 - Server logic: TanStack Start server functions (`src/lib/data/*.functions.ts`), run on the app's own server. No Supabase Edge Functions.
 - AI: Lovable AI Gateway (`src/lib/ai/extract-task.server.ts`), model `openai/gpt-6-astra`, server-side key `LOVABLE_API_KEY`. No Google Gemini key is configured.
-- Storage, Realtime, cron: not used yet.
+- Storage: private `source-documents` bucket (10 MB); notifications use Realtime; managed hourly HTTP reminders enabled.
 
 ## Layers
 | Layer | Location | Notes |
@@ -69,7 +69,7 @@ RLS: every table enabled; select/insert/update/delete only where `auth.uid() = u
 | 2. Dashboard (real data) | Implemented |
 | 3. AI Task Capture | Implemented |
 | 4. Task CRUD + filters | Implemented |
-| 5–8. Projects, goals/milestones, weekly reviews, documents | Tables only; UI not built |
+| 5–8. Projects, goals/milestones, weekly reviews, documents | Implemented; verified against real records |
 | n8n | Not started (by design) |
 
 ## Workspace server functions (src/lib/data/workspace.functions.ts)
@@ -83,3 +83,14 @@ createBriefing — AI daily briefing via src/lib/ai/briefing.server.ts, not pers
 - Browser-only lazy rendering on every screen size in a full-viewport black stage; loading/failure leaves a black background with no overlays. Reduced motion pauses the loaded original scene. No data access or schema changes.
 - When migrating hosting, keep the scene URL reachable or change the component's scene URL to a hosted export of the supplied `scene.splinecode`; do not embed the binary in the repository.
 - Runtime updated to `2.0.100` (newest version eligible under the package release-age policy during this fix). The exported scene has Start transitions and cursor-target LookAt events; render continuously with no foreground hero HTML. No manual replay or invented looping animation is added.
+
+## October feature completion
+- Schema: `0001_review_documents_reminder_foundation.sql` adds reminder preferences, document text/metadata/candidates, unique task import keys, notification links and reminder event ledger. `0002_prevent_reminder_batch_starvation.sql` excludes processed events before the 500-item batch and locks tasks while issuing notifications. Existing data is preserved.
+- Private uploads: `source-documents`, owner UUID folder policies, 10 MB per file; TXT/Markdown/PDF up to 80,000 extracted characters and 100 PDF pages. `unpdf` performs bundled text extraction; scanned/image-only PDFs need OCR elsewhere and return a clear error. Failed or redundant uploads remove their newly created storage object.
+- Server functions: `review.functions.ts` supplies period metrics, AI draft and history; `documents.functions.ts` stores/reopens/analyzes sources; `reminders.functions.ts` saves preferences. `createTask` uses owner-checked `task-write.server.ts` and database uniqueness for retried document imports.
+- Authenticated HTTP routes: `/api/documents` (multipart private source upload), `/api/transcribe` (audio transcription SSE). Ordinary data operations stay in server functions; UI only reads auth session for bearer attachment.
+- AI: streamed structured weekly reviews/document candidates through existing `openai/gpt-6-astra`; source evidence and enum/date validity checked before writes. Speech uses `openai/gpt-transcribe`; complete PCM WAV recording or audio uploads, 10 MB limit and 60-second microphone sessions. Dependencies added: `unpdf`, `eventsource-parser`. Microphone permission is required; uploaded speech was tested end to end.
+- Reminders: managed schedule `aethermind-task-reminders`, hourly at minute zero, calls `/api/public/jobs/reminders` with `{}`. Generated managed credential verification precedes privileged RPC. No email/push provider or AI background calls. At most one upcoming and one overdue event per task/deadline, timezone-aware, no repeats for unchanged overdue tasks; completion/rescheduling clears stale displayed notifications and deletion cascades. The hourly schedule runs 24 times/day, up to about an hour plus 30 seconds after eligibility; recurring checks can keep Cloud active. Published delivery requires publishing the app; preview processor was verified directly.
+- Required server configuration (platform-managed): `SUPABASE_URL`, `SUPABASE_PUBLISHABLE_KEY`, `SUPABASE_SERVICE_ROLE_KEY` for secured reminder RPC, `LOVABLE_API_KEY` for existing AI/transcription, `LOVABLE_CRON_SECRET` with optional rotating `LOVABLE_CRON_SECRET_PREVIOUS`. No secrets added to browser config; no optional email/push credentials configured.
+- Verification: actual AI document extraction, edited/selected confirmed task import, duplicate reimport, text PDF upload, unreadable PDF error, AI weekly review generation/edit/save/reopen, real spoken upload/transcript/task save, overdue processor/retry/auth rejection/completion cleanup, and existing workspace page navigation passed. Mobile documents have no horizontal overflow. Controlled QA records removed after verification.
+- Limitations: no task status audit history; historical outstanding counts are explicitly current-state approximations. No OCR, external notification delivery, or deployed verification. Existing repository-wide lint formatting debt is reported separately; changed feature code is checked independently.
