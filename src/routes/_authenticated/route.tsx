@@ -3,7 +3,7 @@ import { createFileRoute, Link, Outlet, redirect, useNavigate } from "@tanstack/
 import { queryOptions, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   Bell, BookOpen, Calendar, ChevronsLeft, ChevronsRight, Folder, LayoutDashboard, ListTodo,
-  LogOut, Menu, Plus, Search, Settings, Target,
+  LogOut, Menu, Plus, Search, Settings, Target, FileText,
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { getShell } from "@/lib/data/workspace.functions";
@@ -33,7 +33,7 @@ const groups = [
     { to: "/goals", label: "Goals", icon: Target },
     { to: "/calendar", label: "Calendar", icon: Calendar },
   ] },
-  { label: "Intelligence", items: [{ to: "/review", label: "Weekly Review", icon: BookOpen }] },
+  { label: "Intelligence", items: [{ to: "/review", label: "Weekly Review", icon: BookOpen }, { to: "/documents", label: "Documents", icon: FileText }] },
   { label: "Account", items: [
     { to: "/notifications", label: "Notifications", icon: Bell },
     { to: "/settings", label: "Settings", icon: Settings },

@@ -22,6 +22,9 @@ describe("AI task output validation", () => {
   it("rejects a non-ISO date", () => {
     expect(extractedTaskSchema.safeParse({ ...valid, due_date: "Friday" }).success).toBe(false);
   });
+  it("rejects an impossible calendar date", () => {
+    expect(extractedTaskSchema.safeParse({ ...valid, due_date: "2026-02-30" }).success).toBe(false);
+  });
   it("rejects extra fields", () => {
     expect(extractedTaskSchema.safeParse({ ...valid, user_id: "x" }).success).toBe(false);
   });
