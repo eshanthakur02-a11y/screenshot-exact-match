@@ -12,6 +12,7 @@ import { shellQuery } from "./route";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
+import { WorkspaceNavigation } from "@/components/workspace-navigation";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 
 const historyQuery = queryOptions({ queryKey: ["review-history"], queryFn: () => listReviewHistory() });
@@ -42,6 +43,7 @@ function ReviewPage() {
   const { data: history } = useSuspenseQuery(historyQuery);
   const [ws, setWs] = useState(() => weekStart(dayKey(new Date(), shell.timezone)));
   return <div className="space-y-6">
+    <WorkspaceNavigation />
     <div className="flex flex-wrap items-end justify-between gap-4"><h1 className="text-4xl font-semibold">Weekly Review</h1>
       <div className="flex items-center gap-2">
         <Button variant="outline" size="icon" aria-label="Previous week" onClick={() => setWs(addDays(ws,-7))}><ChevronLeft /></Button>

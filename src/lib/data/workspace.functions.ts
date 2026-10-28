@@ -8,7 +8,8 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 const id = z.string().uuid();
 const dateStr = calendarDateSchema;
 // Drops undefined keys (exactOptionalPropertyTypes).
-const clean = <T extends Record<string, unknown>>(o: T): T => Object.fromEntries(Object.entries(o).filter(([, v]) => v !== undefined)) as T;
+type Defined<T> = { [K in keyof T as undefined extends T[K] ? never : K]: T[K] } & { [K in keyof T as undefined extends T[K] ? K : never]?: Exclude<T[K], undefined> };
+const clean = <T extends Record<string, unknown>>(o: T): Defined<T> => Object.fromEntries(Object.entries(o).filter(([, v]) => v !== undefined)) as Defined<T>;
 const fail = (msg: string, e?: unknown): never => { if (e) console.error(msg); throw new Error(msg); };
 
 /* ---------- Shell (header) ---------- */

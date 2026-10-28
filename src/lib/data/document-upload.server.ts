@@ -20,7 +20,7 @@ export async function uploadDocument(request: Request) {
       try {
         if (pdf.numPages > 100) throw new Error("Choose a PDF with 100 pages or fewer.");
         content = (await extractText(pdf, { mergePages: true })).text.trim();
-      } finally { await pdf.destroy(); }
+      } finally { await pdf.loadingTask.destroy(); }
       if (content.length < 3) throw new Error("This PDF has no readable text. Use a text-based PDF or paste the notes; scanned pages need OCR first.");
     } else {
       try { content = new TextDecoder("utf-8", { fatal: true }).decode(bytes).trim(); }
