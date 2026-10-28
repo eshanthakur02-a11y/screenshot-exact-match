@@ -82,7 +82,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "AetherMind — Personal AI Chief of Staff" },
-      { name: "description", content: "Turn plain sentences into organised tasks, projects and goals." },
+      {
+        name: "description",
+        content: "Turn plain sentences into organised tasks, projects and goals.",
+      },
     ],
     links: [
       {
@@ -125,7 +128,8 @@ function RootComponent() {
 
   useEffect(() => {
     const { data } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === "INITIAL_SESSION" || event === "SIGNED_IN" || event === "SIGNED_OUT") setNotificationUser(session?.user.id ?? null);
+      if (event === "INITIAL_SESSION" || event === "SIGNED_IN" || event === "SIGNED_OUT")
+        setNotificationUser(session?.user.id ?? null);
       if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
       router.invalidate();
       if (event !== "SIGNED_OUT") queryClient.invalidateQueries();
