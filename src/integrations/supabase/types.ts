@@ -14,6 +14,42 @@ export type Database = {
   }
   public: {
     Tables: {
+      documents: {
+        Row: {
+          candidates: Json | null
+          content: string
+          content_hash: string
+          created_at: string
+          id: string
+          name: string
+          reference_date: string | null
+          storage_path: string | null
+          user_id: string
+        }
+        Insert: {
+          candidates?: Json | null
+          content: string
+          content_hash: string
+          created_at?: string
+          id?: string
+          name: string
+          reference_date?: string | null
+          storage_path?: string | null
+          user_id: string
+        }
+        Update: {
+          candidates?: Json | null
+          content?: string
+          content_hash?: string
+          created_at?: string
+          id?: string
+          name?: string
+          reference_date?: string | null
+          storage_path?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       goals: {
         Row: {
           created_at: string
@@ -92,8 +128,11 @@ export type Database = {
         Row: {
           body: string | null
           created_at: string
+          deadline_day: string | null
           id: string
           read_at: string | null
+          reminder_event: string | null
+          task_id: string | null
           title: string
           updated_at: string
           user_id: string
@@ -101,8 +140,11 @@ export type Database = {
         Insert: {
           body?: string | null
           created_at?: string
+          deadline_day?: string | null
           id?: string
           read_at?: string | null
+          reminder_event?: string | null
+          task_id?: string | null
           title: string
           updated_at?: string
           user_id: string
@@ -110,19 +152,32 @@ export type Database = {
         Update: {
           body?: string | null
           created_at?: string
+          deadline_day?: string | null
           id?: string
           read_at?: string | null
+          reminder_event?: string | null
+          task_id?: string | null
           title?: string
           updated_at?: string
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "notifications_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       profiles: {
         Row: {
           created_at: string
           display_name: string | null
           id: string
+          reminder_days_before: number
+          reminders_enabled: boolean
           timezone: string
           updated_at: string
         }
@@ -130,6 +185,8 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           id: string
+          reminder_days_before?: number
+          reminders_enabled?: boolean
           timezone?: string
           updated_at?: string
         }
@@ -137,6 +194,8 @@ export type Database = {
           created_at?: string
           display_name?: string | null
           id?: string
+          reminder_days_before?: number
+          reminders_enabled?: boolean
           timezone?: string
           updated_at?: string
         }
@@ -172,6 +231,41 @@ export type Database = {
         }
         Relationships: []
       }
+      reminder_events: {
+        Row: {
+          deadline_day: string
+          event: string
+          id: string
+          processed_at: string
+          task_id: string
+          user_id: string
+        }
+        Insert: {
+          deadline_day: string
+          event: string
+          id?: string
+          processed_at?: string
+          task_id: string
+          user_id: string
+        }
+        Update: {
+          deadline_day?: string
+          event?: string
+          id?: string
+          processed_at?: string
+          task_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reminder_events_task_id_fkey"
+            columns: ["task_id"]
+            isOneToOne: false
+            referencedRelation: "tasks"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tasks: {
         Row: {
           completed_at: string | null
@@ -181,6 +275,7 @@ export type Database = {
           estimated_minutes: number | null
           goal_id: string | null
           id: string
+          import_key: string | null
           priority: string
           project_id: string | null
           source: string
@@ -197,6 +292,7 @@ export type Database = {
           estimated_minutes?: number | null
           goal_id?: string | null
           id?: string
+          import_key?: string | null
           priority?: string
           project_id?: string | null
           source?: string
@@ -213,6 +309,7 @@ export type Database = {
           estimated_minutes?: number | null
           goal_id?: string | null
           id?: string
+          import_key?: string | null
           priority?: string
           project_id?: string | null
           source?: string
@@ -270,7 +367,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      process_task_reminders: { Args: never; Returns: number }
     }
     Enums: {
       [_ in never]: never
