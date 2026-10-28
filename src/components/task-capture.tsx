@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { VoiceCapture } from "@/components/voice-capture";
 
 function localToday() {
   const d = new Date();
@@ -91,6 +92,7 @@ export function TaskCapture() {
           {busy && !draft ? "Reading…" : "Read with AI"}
         </Button>
       </div>
+      <VoiceCapture disabled={busy} onTranscript={(transcript) => { setText(transcript); setDraft(null); setError(null); }} />
       {error && <p className="mt-3 text-sm text-destructive">{error}</p>}
 
       {draft && (

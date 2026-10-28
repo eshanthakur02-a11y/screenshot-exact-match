@@ -6,6 +6,8 @@ import { LogOut } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { updateProfile } from "@/lib/data/workspace.functions";
+import { saveReminderPreferences } from "@/lib/data/reminders.functions";
+import { Switch } from "@/components/ui/switch";
 import { shellQuery } from "./route";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -23,11 +25,14 @@ function SettingsPage() {
   const { data: shell } = useSuspenseQuery(shellQuery);
   const { user } = Route.useRouteContext();
   const save = useServerFn(updateProfile);
+  const saveReminders = useServerFn(saveReminderPreferences);
   const qc = useQueryClient();
   const navigate = useNavigate();
   const [name, setName] = useState(shell.displayName ?? "");
   const [tz, setTz] = useState(shell.timezone);
   const [busy, setBusy] = useState(false);
+  const [enabled, setEnabled] = useState(shell.remindersEnabled);
+  const [days, setDays] = useState(shell.reminderDaysBefore);
 
   async function submit(e: FormEvent) {
     e.preventDefault(); setBusy(true);
@@ -54,6 +59,13 @@ function SettingsPage() {
         </div>
         <div className="flex justify-end"><Button type="submit" disabled={busy} className="bg-gradient-brand">{busy ? "Saving…" : "Save changes"}</Button></div>
       </form>
+      <section className="space-y-4 border-t border-border pt-6">
+        <h2 className="font-sans text-lg font-semibold">Deadline reminders</h2>
+        <div className="flex items-center justify-between"><Label htmlFor="reminders">In-app reminders</Label><Switch id="reminders" checked={enabled} onCheckedChange={setEnabled} disabled={busy} /></div>
+        <div className="space-y-2"><Label htmlFor="reminder-days">Days before deadline</Label><Input id="reminder-days" type="number" min={0} max={7} value={days} onChange={(e) => setDays(Number(e.target.value))} disabled={busy} /></div>
+        <p className="text-xs text-muted-foreground">Checked hourly in your timezone. One upcoming reminder and one overdue reminder per deadline. No email or push delivery.</p>
+        <Button variant="outline" disabled={busy || !Number.isInteger(days) || days<0 || days>7} onClick={async () => { setBusy(true);try { await saveReminders({data:{enabled,days_before:days}});await qc.invalidateQueries({queryKey:["shell"]});toast.success("Reminder preferences saved"); } catch(e) { toast.error(e instanceof Error ? e.message : "Could not save reminders"); } finally {setBusy(false);} }}>Save reminder preferences</Button>
+      </section>
       <section className="glass rounded-2xl p-6">
         <h2 className="font-sans text-lg font-semibold">Account</h2>
         <Button variant="outline" className="mt-3" onClick={signOut}><LogOut /> Sign out</Button>
