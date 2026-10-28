@@ -6,9 +6,6 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { taskInputSchema, taskUpdateSchema } from "@/lib/task-schema";
 import type { TablesUpdate } from "@/integrations/supabase/types";
 
-const toTimestamp = (d: string | null | undefined) =>
-  d === undefined ? undefined : d === null ? null : `${d}T12:00:00Z`;
-
 export const listTasks = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }) => {
@@ -26,27 +23,8 @@ export const createTask = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
   .inputValidator((input: unknown) => taskInputSchema.parse(input))
   .handler(async ({ data, context }) => {
-    const { data: row, error } = await context.supabase
-      .from("tasks")
-      .insert({
-        user_id: context.userId,
-        title: data.title,
-        description: data.description ?? null,
-        priority: data.priority,
-        status: data.status,
-        due_date: toTimestamp(data.due_date) ?? null,
-        estimated_minutes: data.estimated_minutes ?? null,
-        project_id: data.project_id ?? null,
-        source: data.source,
-        completed_at: data.status === "done" ? new Date().toISOString() : null,
-      })
-      .select("*")
-      .single();
-    if (error || !row) {
-      console.error("createTask", error);
-      throw new Error("The task could not be saved.");
-    }
-    return row; // the actual saved record
+    const { saveTaskRow } = await import("./task-write.server");
+    return saveTaskRow(context.supabase, context.userId, data);
   });
 
 export const updateTask = createServerFn({ method: "POST" })
@@ -54,6 +32,8 @@ export const updateTask = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => taskUpdateSchema.parse(input))
   .handler(async ({ data, context }) => {
     const { id, due_date, ...rest } = data;
+    const { checkTaskLinks } = await import("./task-write.server");
+    await checkTaskLinks(context.supabase, context.userId, rest);
     const patch = Object.fromEntries(
       Object.entries(rest).filter(([, v]) => v !== undefined),
     ) as TablesUpdate<"tasks">;
