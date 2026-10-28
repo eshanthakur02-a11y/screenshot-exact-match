@@ -14,6 +14,9 @@ describe("weekly review calculations",()=>{
     expect(weeklyMetrics(tasks,[],"2026-10-26","Asia/Colombo").completed).toBe(1);
     expect(weeklyMetrics(tasks,[],"2026-10-26","UTC").completed).toBe(0);
   });
+  it("does not label the period-end deadline overdue before that date has passed",()=>{
+    expect(weeklyMetrics([task({due_date:"2026-11-01T12:00:00Z"})],[],"2026-10-26","UTC").overdue).toBe(0);
+  });
 });
 describe("structured insight and document validation",()=>{
   const review={accomplishments:[],blockers:[],goal_progress:[],patterns:[],next_priorities:["a","b","c"],follow_up:[]};

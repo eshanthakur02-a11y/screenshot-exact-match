@@ -7,7 +7,7 @@ export function weeklyMetrics(tasks: Tables<"tasks">[], milestones: Tables<"mile
   const completed = tasks.filter((t) => t.status === "done" && t.completed_at && inPeriod(t.completed_at));
   // No status history exists: outstanding counts are explicitly current, not a historical reconstruction.
   const outstanding = tasks.filter((t) => t.status !== "done" && dayKey(new Date(t.created_at), tz) <= end);
-  const overdue = outstanding.filter((t) => { const k = dueKey(t.due_date); return k && k <= end; });
+  const overdue = outstanding.filter((t) => { const k = dueKey(t.due_date); return k && k < end; });
   const carried = outstanding.filter((t) => dayKey(new Date(t.created_at), tz) < start);
   const upcoming = outstanding.filter((t) => { const k = dueKey(t.due_date); return k && k > end && k <= addDays(end, 7); });
   const progressedProjects = new Set(completed.map((t) => t.project_id).filter(Boolean));
