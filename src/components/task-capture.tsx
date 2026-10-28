@@ -84,6 +84,7 @@ export function TaskCapture() {
       </p>
       <Textarea
         id="capture"
+        maxLength={2000}
         className="relative mt-4 min-h-24 bg-background/60"
         placeholder='e.g. "Finish my machine learning assignment by Friday, high priority, about two hours."'
         value={text}
@@ -104,7 +105,7 @@ export function TaskCapture() {
         )}
         <Button
           onClick={analyse}
-          disabled={busy || text.trim().length < 3}
+          disabled={busy || text.trim().length < 3 || text.length > 2000}
           className="bg-gradient-brand shadow-glow"
         >
           {busy && !draft ? "Reading…" : "Read with AI"}
@@ -115,7 +116,7 @@ export function TaskCapture() {
         onTranscript={(transcript) => {
           setText(transcript);
           setDraft(null);
-          setError(null);
+          setError(transcript.length > 2000 ? "This transcript exceeds 2,000 characters. Shorten it before extracting a task." : null);
         }}
       />
       {error && <p className="mt-3 text-sm text-destructive">{error}</p>}
