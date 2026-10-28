@@ -1,9 +1,9 @@
 # AetherMind roadmap
-- [ ] Audit and stabilize existing real-data workflows for the October completion brief.
-- [ ] AI weekly review: period metrics, validated editable draft, confirmed save and history.
-- [ ] Deadline reminders: preferences, idempotent processor, schedule, realtime notifications.
-- [ ] Private document extraction: TXT/Markdown/PDF, editable evidence-backed candidates, retry-safe confirmed task import.
-- [ ] Voice capture: real transcription, editable text and existing confirmed task-saving flow.
+- [x] Audit and stabilize existing real-data workflows for the October completion brief.
+- [x] AI weekly review: period metrics, validated editable draft, confirmed save and history.
+- [x] Deadline reminders: preferences, idempotent processor, schedule, realtime notifications (preview processor verified).
+- [x] Private document extraction: TXT/Markdown/PDF, editable evidence-backed candidates, retry-safe confirmed task import.
+- [x] Voice capture: real transcription, editable text and existing confirmed task-saving flow (spoken upload verified).
 - [ ] Verify new workflows, regressions, migrations, tests and document actual limitations.
 - [ ] Replace hero with a full-screen black robot-only scene; preserve lower sections and verify desktop, tablet, mobile and pointer motion.
 - [x] Diagnose Spline playback, update eligible runtime, expose configured robot motion and verify desktop/tablet pointer input, mobile fallback and real links without altering the design.
@@ -13,16 +13,17 @@
 - [x] Stage 2: Dashboard with real data
 - [x] Stage 3: AI Task Capture (review before save)
 - [x] Stage 4: Task create/edit/complete/filter/delete
-- [ ] Stage 5: Projects UI
-- [ ] Stage 6: Goals + milestones UI
-- [ ] Stage 7: Weekly AI reviews
-- [ ] Stage 8: Document & meeting intelligence
+- [x] Stage 5: Projects UI
+- [x] Stage 6: Goals + milestones UI
+- [x] Stage 7: Weekly AI reviews
+- [x] Stage 8: Document & meeting intelligence
 - [ ] Later: n8n (last), migration to own Supabase (only on request)
 
 ## Dashboard brief (Oct 2026)
 - [x] Shell: grouped sidebar, collapse, mobile drawer, search, quick-create, bell, profile menu
 - [x] Dashboard: metrics (timezone-aware), AI briefing, capture, priorities tabs, deadlines, charts 7/30/90d, projects, goals
 - [x] Projects, Goals + milestones, Calendar (day/week/month/agenda), Weekly Review, Notifications, Settings
-- [ ] Inbox, AI Workspace chat, Documents, Insights, voice capture — not built yet
-- [ ] Working hours / default priority / notification preferences — need new settings fields
-- [ ] Automatic reminders creating notifications — needs a scheduled job
+- [ ] Inbox, AI Workspace chat, Insights — outside October completion scope
+- [ ] Working hours / default priority — outside October completion scope
+- [x] Documents, voice capture and in-app reminder preferences
+- [ ] Live scheduled reminder delivery — waits on user-requested publishing; hourly processor already verified in preview
