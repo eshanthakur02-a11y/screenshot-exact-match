@@ -116,7 +116,11 @@ export function TaskCapture() {
         onTranscript={(transcript) => {
           setText(transcript);
           setDraft(null);
-          setError(transcript.length > 2000 ? "This transcript exceeds 2,000 characters. Shorten it before extracting a task." : null);
+          setError(
+            transcript.length > 2000
+              ? "This transcript exceeds 2,000 characters. Shorten it before extracting a task."
+              : null,
+          );
         }}
       />
       {error && <p className="mt-3 text-sm text-destructive">{error}</p>}
