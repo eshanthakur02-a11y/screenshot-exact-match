@@ -20,6 +20,8 @@ import { Route as AuthenticatedProjectsRouteImport } from './routes/_authenticat
 import { Route as AuthenticatedReviewRouteImport } from './routes/_authenticated/review'
 import { Route as AuthenticatedSettingsRouteImport } from './routes/_authenticated/settings'
 import { Route as AuthenticatedTasksRouteImport } from './routes/_authenticated/tasks'
+import { Route as ApiDocumentsRouteImport } from './routes/api/documents'
+import { Route as ApiTranscribeRouteImport } from './routes/api/transcribe'
 import { Route as ApiPublicJobsRemindersRouteImport } from './routes/api/public/jobs/reminders'
 
 const IndexRoute = IndexRouteImport.update({
@@ -77,6 +79,16 @@ const AuthenticatedTasksRoute = AuthenticatedTasksRouteImport.update({
   path: '/tasks',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ApiDocumentsRoute = ApiDocumentsRouteImport.update({
+  id: '/api/documents',
+  path: '/api/documents',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiTranscribeRoute = ApiTranscribeRouteImport.update({
+  id: '/api/transcribe',
+  path: '/api/transcribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ApiPublicJobsRemindersRoute = ApiPublicJobsRemindersRouteImport.update({
   id: '/api/public/jobs/reminders',
   path: '/api/public/jobs/reminders',
@@ -94,6 +106,8 @@ export interface FileRoutesByFullPath {
   '/review': typeof AuthenticatedReviewRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/tasks': typeof AuthenticatedTasksRoute
+  '/api/documents': typeof ApiDocumentsRoute
+  '/api/transcribe': typeof ApiTranscribeRoute
   '/api/public/jobs/reminders': typeof ApiPublicJobsRemindersRoute
 }
 export interface FileRoutesByTo {
@@ -107,6 +121,8 @@ export interface FileRoutesByTo {
   '/review': typeof AuthenticatedReviewRoute
   '/settings': typeof AuthenticatedSettingsRoute
   '/tasks': typeof AuthenticatedTasksRoute
+  '/api/documents': typeof ApiDocumentsRoute
+  '/api/transcribe': typeof ApiTranscribeRoute
   '/api/public/jobs/reminders': typeof ApiPublicJobsRemindersRoute
 }
 export interface FileRoutesById {
@@ -122,6 +138,8 @@ export interface FileRoutesById {
   '/_authenticated/review': typeof AuthenticatedReviewRoute
   '/_authenticated/settings': typeof AuthenticatedSettingsRoute
   '/_authenticated/tasks': typeof AuthenticatedTasksRoute
+  '/api/documents': typeof ApiDocumentsRoute
+  '/api/transcribe': typeof ApiTranscribeRoute
   '/api/public/jobs/reminders': typeof ApiPublicJobsRemindersRoute
 }
 export interface FileRouteTypes {
@@ -137,6 +155,8 @@ export interface FileRouteTypes {
     | '/review'
     | '/settings'
     | '/tasks'
+    | '/api/documents'
+    | '/api/transcribe'
     | '/api/public/jobs/reminders'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -150,6 +170,8 @@ export interface FileRouteTypes {
     | '/review'
     | '/settings'
     | '/tasks'
+    | '/api/documents'
+    | '/api/transcribe'
     | '/api/public/jobs/reminders'
   id:
     | '__root__'
@@ -164,6 +186,8 @@ export interface FileRouteTypes {
     | '/_authenticated/review'
     | '/_authenticated/settings'
     | '/_authenticated/tasks'
+    | '/api/documents'
+    | '/api/transcribe'
     | '/api/public/jobs/reminders'
   fileRoutesById: FileRoutesById
 }
@@ -171,6 +195,8 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  ApiDocumentsRoute: typeof ApiDocumentsRoute
+  ApiTranscribeRoute: typeof ApiTranscribeRoute
   ApiPublicJobsRemindersRoute: typeof ApiPublicJobsRemindersRoute
 }
 
@@ -253,6 +279,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedTasksRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/documents': {
+      id: '/api/documents'
+      path: '/api/documents'
+      fullPath: '/api/documents'
+      preLoaderRoute: typeof ApiDocumentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/transcribe': {
+      id: '/api/transcribe'
+      path: '/api/transcribe'
+      fullPath: '/api/transcribe'
+      preLoaderRoute: typeof ApiTranscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/api/public/jobs/reminders': {
       id: '/api/public/jobs/reminders'
       path: '/api/public/jobs/reminders'
@@ -292,6 +332,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  ApiDocumentsRoute: ApiDocumentsRoute,
+  ApiTranscribeRoute: ApiTranscribeRoute,
   ApiPublicJobsRemindersRoute: ApiPublicJobsRemindersRoute,
 }
 export const routeTree = rootRouteImport
